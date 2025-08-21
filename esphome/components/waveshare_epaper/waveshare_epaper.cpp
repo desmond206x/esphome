@@ -4244,8 +4244,8 @@ void HOT WaveshareEPaper7P5InV2P::display() {
 
   // if (this->full_update_every_ == 1) {
   this->command(0x10);
-  for (uint32_t i = 0; i < buf_len / 4; i++) {
-    this->data(~(this->buffer_[i]));
+  for (uint32_t i = 0; i < buf_len / 8; i++) {
+    this->data((this->buffer_[i]));
   }
 
   this->turn_on_display_();
