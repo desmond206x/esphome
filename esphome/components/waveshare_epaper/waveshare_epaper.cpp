@@ -4196,7 +4196,7 @@ void WaveshareEPaper7P5InV2P::initialize() {
 
   // COMMAND PANEL SETTING
   this->command(0x00);
-  this->data(0x0F);
+  this->data(0x2F);
 
   // COMMAND RESOLUTION SETTING
   this->command(0x61);
