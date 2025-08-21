@@ -4238,82 +4238,86 @@ void HOT WaveshareEPaper7P5InV2P::display() {
   delay(200);  // NOLINT
   this->wait_until_idle_();
 
-  if (this->full_update_every_ == 1) {
-    this->command(0x10);
-    for (uint32_t i = 0; i < buf_len / 4; i++) {
-      this->data((this->buffer_[i]));
-    }
-
-    this->turn_on_display_();
-
-    this->command(0x02);
-    this->wait_until_idle_();
-    return;
-  }
-
   this->command(0x50);
   this->data(0xA9);
   this->data(0x07);
 
-  if (this->at_update_ == 0) {
-    // Enable fast refresh
-    this->command(0xE5);
-    this->data(0x5A);
-
-    this->command(0x92);
-
-    this->command(0x10);
-    delay(2);
-    for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(~(this->buffer_[i]));
-    }
-
-    delay(100);  // NOLINT
-    this->wait_until_idle_();
-
-    this->command(0x13);
-    delay(2);
-    for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(this->buffer_[i]);
-    }
-
-    delay(100);  // NOLINT
-    this->wait_until_idle_();
-
-    this->turn_on_display_();
-
-  } else {
-    // Enable partial refresh
-    this->command(0xE5);
-    this->data(0x6E);
-
-    // Activate partial refresh and set window bounds
-    this->command(0x91);
-    this->command(0x90);
-
-    this->data(0x00);
-    this->data(0x00);
-    this->data((get_width_internal() - 1) >> 8 & 0xFF);
-    this->data((get_width_internal() - 1) & 0xFF);
-
-    this->data(0x00);
-    this->data(0x00);
-    this->data((get_height_internal() - 1) >> 8 & 0xFF);
-    this->data((get_height_internal() - 1) & 0xFF);
-
-    this->data(0x01);
-
-    this->command(0x13);
-    delay(2);
-    for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(this->buffer_[i]);
-    }
-
-    delay(100);  // NOLINT
-    this->wait_until_idle_();
-
-    this->turn_on_display_();
+  // if (this->full_update_every_ == 1) {
+  this->command(0x10);
+  for (uint32_t i = 0; i < buf_len / 4; i++) {
+    this->data((this->buffer_[i]));
   }
+
+  this->turn_on_display_();
+
+  this->command(0x02);
+  this->wait_until_idle_();
+  return;
+  // }
+
+  // this->command(0x50);
+  // this->data(0xA9);
+  // this->data(0x07);
+
+  // if (this->at_update_ == 0) {
+  //   // Enable fast refresh
+  //   this->command(0xE5);
+  //   this->data(0x5A);
+
+  //   this->command(0x92);
+
+  //   this->command(0x10);
+  //   delay(2);
+  //   for (uint32_t i = 0; i < buf_len; i++) {
+  //     this->data(~(this->buffer_[i]));
+  //   }
+
+  //   delay(100);  // NOLINT
+  //   this->wait_until_idle_();
+
+  //   this->command(0x13);
+  //   delay(2);
+  //   for (uint32_t i = 0; i < buf_len; i++) {
+  //     this->data(this->buffer_[i]);
+  //   }
+
+  //   delay(100);  // NOLINT
+  //   this->wait_until_idle_();
+
+  //   this->turn_on_display_();
+
+  // } else {
+  //   // Enable partial refresh
+  //   this->command(0xE5);
+  //   this->data(0x6E);
+
+  //   // Activate partial refresh and set window bounds
+  //   this->command(0x91);
+  //   this->command(0x90);
+
+  //   this->data(0x00);
+  //   this->data(0x00);
+  //   this->data((get_width_internal() - 1) >> 8 & 0xFF);
+  //   this->data((get_width_internal() - 1) & 0xFF);
+
+  //   this->data(0x00);
+  //   this->data(0x00);
+  //   this->data((get_height_internal() - 1) >> 8 & 0xFF);
+  //   this->data((get_height_internal() - 1) & 0xFF);
+
+  //   this->data(0x01);
+
+  //   this->command(0x13);
+  //   delay(2);
+  //   for (uint32_t i = 0; i < buf_len; i++) {
+  //     this->data(this->buffer_[i]);
+  //   }
+
+  //   delay(100);  // NOLINT
+  //   this->wait_until_idle_();
+
+  //   this->turn_on_display_();
+  // }
 
   ESP_LOGV(TAG, "Before command(0x02) (>> power off)");
   this->command(0x02);
