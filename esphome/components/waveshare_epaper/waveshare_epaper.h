@@ -956,7 +956,7 @@ class WaveshareEPaper7P5InV2alt : public WaveshareEPaper7P5InV2 {
   };
 };
 
-class WaveshareEPaper7P5InV2P : public WaveshareEPaperBWR {
+class WaveshareEPaper7P5InV2P : public WaveshareEPaper {
  public:
   bool wait_until_idle_();
 
