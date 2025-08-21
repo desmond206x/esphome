@@ -4238,9 +4238,9 @@ void HOT WaveshareEPaper7P5InV2P::display() {
   delay(200);  // NOLINT
   this->wait_until_idle_();
 
-  this->command(0x50);
-  this->data(0xA9);
-  this->data(0x07);
+  // this->command(0x50);
+  // this->data(0xA9);
+  // this->data(0x07);
 
   // if (this->full_update_every_ == 1) {
   this->command(0x10);
@@ -4255,9 +4255,9 @@ void HOT WaveshareEPaper7P5InV2P::display() {
   return;
   // }
 
-  // this->command(0x50);
-  // this->data(0xA9);
-  // this->data(0x07);
+  this->command(0x50);
+  this->data(0xA9);
+  this->data(0x07);
 
   // if (this->at_update_ == 0) {
   //   // Enable fast refresh
