@@ -4243,7 +4243,7 @@ void HOT WaveshareEPaper7P5InV2P::display() {
   this->data(0x07);
 
   // if (this->full_update_every_ == 1) {
-  this->command(0x10);
+  this->command(0x13);
   for (uint32_t i = 0; i < buf_len; i++) {
     this->data((this->buffer_[i]));
   }
