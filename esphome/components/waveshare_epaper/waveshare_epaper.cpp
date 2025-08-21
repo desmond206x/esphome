@@ -4229,7 +4229,7 @@ void WaveshareEPaper7P5InV2P::initialize() {
 }
 
 void HOT WaveshareEPaper7P5InV2P::display() {
-  uint32_t buf_len = this->get_buffer_length_();
+  uint32_t buf_len = this->get_width_controller() * this->get_height_internal() / 8u;
 
   // COMMAND POWER ON
   ESP_LOGI(TAG, "Power on the display and hat");
@@ -4238,26 +4238,26 @@ void HOT WaveshareEPaper7P5InV2P::display() {
   delay(200);  // NOLINT
   this->wait_until_idle_();
 
-  // this->command(0x50);
-  // this->data(0xA9);
-  // this->data(0x07);
+  this->command(0x50);
+  this->data(0xA9);
+  this->data(0x07);
 
   // if (this->full_update_every_ == 1) {
-  // this->command(0x10);
-  // for (uint32_t i = 0; i < buf_len; i++) {
-  //   this->data((this->buffer_[i]));
-  // }
+  this->command(0x10);
+  for (uint32_t i = 0; i < buf_len; i++) {
+    this->data((this->buffer_[i]));
+  }
 
-  this->turn_on_display_();
+  // this->turn_on_display_();
 
   this->command(0x02);
   this->wait_until_idle_();
   return;
   // }
 
-  this->command(0x50);
-  this->data(0xA9);
-  this->data(0x07);
+  // this->command(0x50);
+  // this->data(0xA9);
+  // this->data(0x07);
 
   // if (this->at_update_ == 0) {
   //   // Enable fast refresh
