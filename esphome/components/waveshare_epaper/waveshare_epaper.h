@@ -993,7 +993,7 @@ class WaveshareEPaper7P5InV2P : public WaveshareEPaper {
   void turn_on_display_();
 };
 
-class WaveshareEPaper7P5InV2BPBWR : public WaveshareEPaperBWR {
+class WaveshareEPaper7P5InBV2PBWR : public WaveshareEPaperBWR {
  public:
   bool wait_until_idle_();
 
