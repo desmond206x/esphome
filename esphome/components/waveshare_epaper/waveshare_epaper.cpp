@@ -4592,7 +4592,7 @@ void WaveshareEPaper7P5InBV2PBWR::init_display_() {
 
   // VCOM DC Setting
   this->command(0x82);
-  this->data(0x24);  // VCOM=-1.9V
+  this->data(0x24);  // VCOM=-1.9V ?? Aber ist 1.10V
 
   // POWER ON
   this->command(0x04);
@@ -4609,6 +4609,13 @@ void WaveshareEPaper7P5InBV2PBWR::init_display_() {
   this->data(0x20);
   this->data(0x01);  // gate 480
   this->data(0xE0);
+
+  //   // TCON_RESOLUTION
+  // this->command(0x61);
+  // this->data(this->get_width_controller() >> 8);
+  // this->data(this->get_width_controller() & 0xff);  // 800
+  // this->data(this->get_height_internal() >> 8);
+  // this->data(this->get_height_internal() & 0xff);  // 180
 
   // COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
