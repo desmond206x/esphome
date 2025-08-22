@@ -4555,10 +4555,6 @@ static const uint8_t PART_UPDATE_LUT_TTGO_DKE[LUT_SIZE_TTGO_DKE_PART] = {
     // 0x22,   0x17,   0x41,   0x0,    0x32,   0x32
 };
 
-int WaveshareEPaper7P5InBV2PBWR::get_width_internal() { return 800; }
-int WaveshareEPaper7P5InBV2PBWR::get_height_internal() { return 480; }
-uint32_t WaveshareEPaper7P5InBV2PBWR::idle_timeout_() { return 10000; }
-
 void WaveshareEPaper7P5InBV2PBWR::initialize() { this->init_display_(); }
 bool WaveshareEPaper7P5InBV2PBWR::wait_until_idle_() {
   if (this->busy_pin_ == nullptr) {
@@ -4653,6 +4649,7 @@ void HOT WaveshareEPaper7P5InBV2PBWR::display() {
 }
 int WaveshareEPaper7P5InBV2PBWR::get_width_internal() { return 800; }
 int WaveshareEPaper7P5InBV2PBWR::get_height_internal() { return 480; }
+uint32_t WaveshareEPaper7P5InBV2PBWR::idle_timeout_() { return 10000; }
 void WaveshareEPaper7P5InBV2PBWR::dump_config() {
   LOG_DISPLAY("", "Waveshare E-Paper", this);
   ESP_LOGCONFIG(TAG, "  Model: 7.5in-bv2 Partial Update BWR-Mode");
