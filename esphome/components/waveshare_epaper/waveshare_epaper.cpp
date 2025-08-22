@@ -4574,6 +4574,9 @@ bool WaveshareEPaper7P5InBV2PBWR::wait_until_idle_() {
   delay(200);  // NOLINT
   return true;
 };
+void WaveshareEPaper7P5InBV2PBWR::set_full_update_every(uint32_t full_update_every) {
+  this->full_update_every_ = full_update_every;
+}
 void WaveshareEPaper7P5InBV2PBWR::init_display_() {
   this->reset_();
 
