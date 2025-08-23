@@ -4603,19 +4603,19 @@ void WaveshareEPaper7P5InBV2PBWR::init_display_() {
   this->command(0x00);
   this->data(0x0F);  // KW-3f   KWR-2F BWROTP 0f BWOTP 1f
 
-  // COMMAND RESOLUTION SETTING
-  this->command(0x61);
-  this->data(0x03);  // source 800
-  this->data(0x20);
-  this->data(0x01);  // gate 480
-  this->data(0xE0);
-
-  //   // TCON_RESOLUTION
+  // // COMMAND RESOLUTION SETTING
   // this->command(0x61);
-  // this->data(this->get_width_controller() >> 8);
-  // this->data(this->get_width_controller() & 0xff);  // 800
-  // this->data(this->get_height_internal() >> 8);
-  // this->data(this->get_height_internal() & 0xff);  // 180
+  // this->data(0x03);  // source 800
+  // this->data(0x20);
+  // this->data(0x01);  // gate 480
+  // this->data(0xE0);
+
+    // TCON_RESOLUTION
+  this->command(0x61);
+  this->data(this->get_width_controller() >> 8);
+  this->data(this->get_width_controller() & 0xff);  // 800
+  this->data(this->get_height_internal() >> 8);
+  this->data(this->get_height_internal() & 0xff);  // 180
 
   // COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
