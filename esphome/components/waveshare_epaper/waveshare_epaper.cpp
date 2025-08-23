@@ -4601,7 +4601,7 @@ void WaveshareEPaper7P5InBV2PBWR::init_display_() {
 
   // COMMAND PANEL SETTING
   this->command(0x00);
-  this->data(0x2F);  // KW-3f   KWR-2F BWROTP 0f BWOTP 1f
+  this->data(0x1F);  // KW-3f   KWR-2F BWROTP 0f BWOTP 1f
 
   // // COMMAND RESOLUTION SETTING
   // this->command(0x61);
