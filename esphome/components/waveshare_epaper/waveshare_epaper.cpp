@@ -4555,8 +4555,8 @@ static const uint8_t PART_UPDATE_LUT_TTGO_DKE[LUT_SIZE_TTGO_DKE_PART] = {
     // 0x22,   0x17,   0x41,   0x0,    0x32,   0x32
 };
 
-void WaveshareEPaper7P5InBV2PBWR::initialize() { this->init_display_(); }
-bool WaveshareEPaper7P5InBV2PBWR::wait_until_idle_() {
+void WaveshareEPaper7P5InBV3PBWR::initialize() { this->init_display_(); }
+bool WaveshareEPaper7P5InBV3PBWR::wait_until_idle_() {
   if (this->busy_pin_ == nullptr) {
     return true;
   }
@@ -4574,10 +4574,10 @@ bool WaveshareEPaper7P5InBV2PBWR::wait_until_idle_() {
   delay(200);  // NOLINT
   return true;
 };
-void WaveshareEPaper7P5InBV2PBWR::set_full_update_every(uint32_t full_update_every) {
+void WaveshareEPaper7P5InBV3PBWR::set_full_update_every(uint32_t full_update_every) {
   this->full_update_every_ = full_update_every;
 }
-void WaveshareEPaper7P5InBV2PBWR::init_display_() {
+void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->reset_();
 
   // COMMAND POWER SETTING
@@ -4633,7 +4633,7 @@ void WaveshareEPaper7P5InBV2PBWR::init_display_() {
   this->data(0x00);
   this->data(0x00);
 };
-void HOT WaveshareEPaper7P5InBV2PBWR::display() {
+void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   this->init_display_();
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
 
@@ -4654,10 +4654,10 @@ void HOT WaveshareEPaper7P5InBV2PBWR::display() {
   this->wait_until_idle_();
   this->deep_sleep();
 }
-int WaveshareEPaper7P5InBV2PBWR::get_width_internal() { return 800; }
-int WaveshareEPaper7P5InBV2PBWR::get_height_internal() { return 480; }
-uint32_t WaveshareEPaper7P5InBV2PBWR::idle_timeout_() { return 10000; }
-void WaveshareEPaper7P5InBV2PBWR::dump_config() {
+int WaveshareEPaper7P5InBV3PBWR::get_width_internal() { return 800; }
+int WaveshareEPaper7P5InBV3PBWR::get_height_internal() { return 480; }
+uint32_t WaveshareEPaper7P5InBV3PBWR::idle_timeout_() { return 10000; }
+void WaveshareEPaper7P5InBV3PBWR::dump_config() {
   LOG_DISPLAY("", "Waveshare E-Paper", this);
   ESP_LOGCONFIG(TAG, "  Model: 7.5in-bv2 Partial Update BWR-Mode");
   LOG_PIN("  Reset Pin: ", this->reset_pin_);
