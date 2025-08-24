@@ -4680,7 +4680,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->command(0x10);
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(~(this->buffer_[i]));
+      this->data(this->buffer_[i]);
     }
 
     delay(100);  // NOLINT
@@ -4689,7 +4689,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->command(0x13);
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(this->buffer_[i]);
+      this->data(this->buffer_[i + buf_len]);
     }
 
     delay(100);  // NOLINT
