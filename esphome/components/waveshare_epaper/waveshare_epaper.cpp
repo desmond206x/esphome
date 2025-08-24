@@ -4641,24 +4641,108 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
   ESP_LOGI(TAG, "Power on the display and hat");
-  this->init_display_();
+  // this->init_display_();
 
-  this->command(0x10);  // Send BW data Transmission
-  delay(2);
-  for (uint32_t i = 0; i < buf_len; i++) {
-    this->data(this->buffer_[i]);
-  }
-
-  this->command(0x13);  // Send red data Transmission
-  delay(2);
-  for (uint32_t i = 0; i < buf_len; i++) {
-    this->data(this->buffer_[i + buf_len]);
-  }
-
-  this->command(0x12);  // Display Refresh
-  delay(100);           // NOLINT
+  this->command(0x04);
+  delay(200);  // NOLINT
   this->wait_until_idle_();
-  this->deep_sleep();
+
+  if (this->full_update_every_ == 1) {
+    this->command(0x10);  // Send BW data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+
+    this->command(0x13);  // Send red data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i + buf_len]);
+    }
+
+    this->turn_on_display_();
+
+    // this->deep_sleep();
+  }
+
+  this->command(0x50);
+  this->data(0xA9);
+  this->data(0x07);
+
+  if (this->at_update_ == 0) {
+    ESP_LOGI(TAG, "Fast refresh");
+    // Enable fast refresh
+    this->command(0xE5);
+    this->data(0x5A);
+
+    this->command(0x92);
+
+    this->command(0x10);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(~(this->buffer_[i]));
+    }
+
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+
+    this->command(0x13);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+
+    this->turn_on_display_();
+
+  } else {
+    ESP_LOGI(TAG, "Partial refresh");
+    // Enable partial refresh
+    this->command(0xE5);
+    this->data(0x6E);
+
+    // Activate partial refresh and set window bounds
+    this->command(0x91);
+    this->command(0x90);
+
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_width_internal() - 1) >> 8 & 0xFF);
+    this->data((get_width_internal() - 1) & 0xFF);
+
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_height_internal() - 1) >> 8 & 0xFF);
+    this->data((get_height_internal() - 1) & 0xFF);
+
+    this->data(0x01);
+
+    this->command(0x13);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+
+    this->turn_on_display_();
+  }
+
+  ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
+  this->command(0x02);
+  this->wait_until_idle_();
+  ESP_LOGI(TAG, "After command(0x02) (>> power off)");
+
+  this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
+}
+
+void WaveshareEPaper7P5InBV3PBWR::turn_on_display_() {
+  this->command(0x12);
+  delay(100);  // NOLINT
+  this->wait_until_idle_();
 }
 
 int WaveshareEPaper7P5InBV3PBWR::get_width_internal() { return 800; }
