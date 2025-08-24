@@ -4230,7 +4230,6 @@ void WaveshareEPaper7P5InV2P::initialize() {
 
 void HOT WaveshareEPaper7P5InV2P::display() {
   uint32_t buf_len = this->get_buffer_length_();
-  // this->get_width_controller() * this->get_height_internal() / 8u;
 
   // COMMAND POWER ON
   ESP_LOGI(TAG, "Power on the display and hat");
@@ -4239,86 +4238,82 @@ void HOT WaveshareEPaper7P5InV2P::display() {
   delay(200);  // NOLINT
   this->wait_until_idle_();
 
-  // this->command(0x50);
-  // this->data(0xA9);
-  // this->data(0x07);
+  if (this->full_update_every_ == 1) {
+    this->command(0x13);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(~(this->buffer_[i]));
+    }
 
-  // if (this->full_update_every_ == 1) {
-  this->command(0x13);
-  for (uint32_t i = 0; i < buf_len; i++) {
-    this->data((this->buffer_[i]));
+    this->turn_on_display_();
+
+    this->command(0x02);
+    this->wait_until_idle_();
+    return;
   }
-
-  this->turn_on_display_();
-
-  this->command(0x02);
-  this->wait_until_idle_();
-  return;
-  // }
 
   this->command(0x50);
   this->data(0xA9);
   this->data(0x07);
 
-  // if (this->at_update_ == 0) {
-  //   // Enable fast refresh
-  //   this->command(0xE5);
-  //   this->data(0x5A);
+  if (this->at_update_ == 0) {
+    // Enable fast refresh
+    this->command(0xE5);
+    this->data(0x5A);
 
-  //   this->command(0x92);
+    this->command(0x92);
 
-  //   this->command(0x10);
-  //   delay(2);
-  //   for (uint32_t i = 0; i < buf_len; i++) {
-  //     this->data(~(this->buffer_[i]));
-  //   }
+    this->command(0x10);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(~(this->buffer_[i]));
+    }
 
-  //   delay(100);  // NOLINT
-  //   this->wait_until_idle_();
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
 
-  //   this->command(0x13);
-  //   delay(2);
-  //   for (uint32_t i = 0; i < buf_len; i++) {
-  //     this->data(this->buffer_[i]);
-  //   }
+    this->command(0x13);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
 
-  //   delay(100);  // NOLINT
-  //   this->wait_until_idle_();
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
 
-  //   this->turn_on_display_();
+    this->turn_on_display_();
 
-  // } else {
-  //   // Enable partial refresh
-  //   this->command(0xE5);
-  //   this->data(0x6E);
+  } else {
+    // Enable partial refresh
+    this->command(0xE5);
+    this->data(0x6E);
 
-  //   // Activate partial refresh and set window bounds
-  //   this->command(0x91);
-  //   this->command(0x90);
+    // Activate partial refresh and set window bounds
+    this->command(0x91);
+    this->command(0x90);
 
-  //   this->data(0x00);
-  //   this->data(0x00);
-  //   this->data((get_width_internal() - 1) >> 8 & 0xFF);
-  //   this->data((get_width_internal() - 1) & 0xFF);
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_width_internal() - 1) >> 8 & 0xFF);
+    this->data((get_width_internal() - 1) & 0xFF);
 
-  //   this->data(0x00);
-  //   this->data(0x00);
-  //   this->data((get_height_internal() - 1) >> 8 & 0xFF);
-  //   this->data((get_height_internal() - 1) & 0xFF);
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_height_internal() - 1) >> 8 & 0xFF);
+    this->data((get_height_internal() - 1) & 0xFF);
 
-  //   this->data(0x01);
+    this->data(0x01);
 
-  //   this->command(0x13);
-  //   delay(2);
-  //   for (uint32_t i = 0; i < buf_len; i++) {
-  //     this->data(this->buffer_[i]);
-  //   }
+    this->command(0x13);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
 
-  //   delay(100);  // NOLINT
-  //   this->wait_until_idle_();
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
 
-  //   this->turn_on_display_();
-  // }
+    this->turn_on_display_();
+  }
 
   ESP_LOGV(TAG, "Before command(0x02) (>> power off)");
   this->command(0x02);
@@ -4590,6 +4585,13 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->data(0x26);  // VSL=-9.4V?
   this->data(0x11);  // VSHR=5.8V?
 
+  // COMMAND BOOSTER SOFT START
+  this->command(0x06);
+  this->data(0x17);
+  this->data(0x17);
+  this->data(0x28);
+  this->data(0x17);
+
   // VCOM DC Setting
   this->command(0x82);
   this->data(0x24);  // VCOM=-1.9V
@@ -4612,8 +4614,8 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
 
   // COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
-  this->data(0x20);
-  this->data(0x00);
+  this->data(0x20); // 0x10
+  this->data(0x00); // 0x07
 
   // COMMAND TCON SETTING
   this->command(0x60);
@@ -4625,11 +4627,21 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->data(0x00);  // 800*480
   this->data(0x00);
   this->data(0x00);
+
+  // COMMAND ENABLE FAST UPDATE
+  this->command(0xE0);
+  this->data(0x02);
+  this->command(0xE5);
+  this->data(0x5A);
+
+  // COMMAND POWER DRIVER HAT DOWN
+  this->command(0x02);
 };
 
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
-   this->init_display_();
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
+  ESP_LOGI(TAG, "Power on the display and hat");
+  this->init_display_();
 
   this->command(0x10);  // Send BW data Transmission
   delay(2);
