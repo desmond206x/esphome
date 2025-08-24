@@ -1038,6 +1038,8 @@ class WaveshareEPaper7P5InBV3PBWR : public WaveshareEPaperBWR {
     }
   };
 
+  void turn_on_display_();
+
   void init_display_();
 };
 
