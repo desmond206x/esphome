@@ -4635,18 +4635,29 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
 };
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   this->init_display_();
-  const uint32_t buf_len = this->get_buffer_length_() / 2u;
+  const uint32_t buf_len = this->get_buffer_length_();
 
-  this->command(0x10);  // Send BW data Transmission
-  delay(2);
+  // this->command(0x10);  // Send BW data Transmission
+  // delay(2);
+  // for (uint32_t i = 0; i < buf_len; i++) {
+  //   this->data(this->buffer_[i]);
+  // }
+
+  // this->command(0x13);  // Send red data Transmission
+  // delay(2);
+  // for (uint32_t i = 0; i < buf_len; i++) {
+  //   this->data(this->buffer_[i + buf_len]);
+  // }
+
+  this->command(0x10);
   for (uint32_t i = 0; i < buf_len; i++) {
-    this->data(this->buffer_[i]);
+    this->data(0xFF);
   }
 
-  this->command(0x13);  // Send red data Transmission
+  this->command(0x13);  // Start Transmission
   delay(2);
   for (uint32_t i = 0; i < buf_len; i++) {
-    this->data(this->buffer_[i + buf_len]);
+    this->data(~this->buffer_[i]);
   }
 
   this->command(0x12);  // Display Refresh
