@@ -4776,6 +4776,12 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->data((get_height_internal() - 1) & 0xFF);
     this->data(0x01);
 
+    this->command(0x10);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(0xFF);
+    }
+
     this->command(0x13);
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
