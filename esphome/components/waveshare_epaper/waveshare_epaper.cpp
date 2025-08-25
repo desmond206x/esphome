@@ -4651,7 +4651,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
 void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
   this->reset_();
 
-  this->command(0X00);
+  this->command(0x00);
   this->data(0x0F);
 
   this->command(0x04);
@@ -4668,7 +4668,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
   this->data(0x02);
   this->command(0xE5);
   this->data(0x5A);
-  this->command(0X50);
+  this->command(0x50);
   this->data(0x11);
   this->data(0x07);
 }
@@ -4676,7 +4676,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
 void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->reset_();
 
-  this->command(0X00);
+  this->command(0x00);
   this->data(0x1F);
 
   this->command(0x04);
@@ -4688,7 +4688,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->command(0xE5);
   this->data(0x6E);
 
-  this->command(0X50);
+  this->command(0x50);
   this->data(0xA9);
   this->data(0x07);
 }
