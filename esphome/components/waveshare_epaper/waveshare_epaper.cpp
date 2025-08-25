@@ -4707,7 +4707,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->command(0x10);  // Send BW data Transmission
     delay(2); //TODO: Remove
     for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(~this->buffer_[i]);
+      this->data(this->buffer_[i]);
     }
 
     this->command(0x13);  // Send red data Transmission
@@ -4758,9 +4758,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
   } else {
     ESP_LOGI(TAG, "Partial refresh");
-    // Enable partial refresh
-    // this->command(0xE5);
-    // this->data(0x6E);
+    Enable partial refresh
+    this->command(0xE5);
+    this->data(0x6E);
 
     // Activate partial refresh and set window bounds
     this->command(0x91);
@@ -4785,7 +4785,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
     this->turn_on_display_();
 
-    // this->command(0x92);
+    this->command(0x92);
   }
 
   ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
