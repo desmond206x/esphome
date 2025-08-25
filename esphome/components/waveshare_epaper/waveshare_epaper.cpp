@@ -4717,7 +4717,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     }
 
     this->turn_on_display_();
-
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
     // this->deep_sleep();
   }
 
@@ -4736,7 +4737,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
     // this->command(0x92);
 
-    this->command(0x13);
+    this->command(0x10);
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i]);
@@ -4745,17 +4746,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     // delay(100);  // NOLINT
     // this->wait_until_idle_();
 
-    // this->command(0x13);
-    // delay(2);
-    // for (uint32_t i = 0; i < buf_len; i++) {
-    //   this->data(this->buffer_[i + buf_len]);
-    // }
-
-    // delay(100);  // NOLINT
-    // this->wait_until_idle_();
+    this->command(0x13);
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i + buf_len]);
+    }
 
     this->turn_on_display_();
-
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
   } else {
     ESP_LOGI(TAG, "Partial refresh");
     Enable partial refresh
@@ -4785,12 +4784,16 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
     this->turn_on_display_();
 
+    this->wait_until_idle_();
+
     this->command(0x92);
+
+    this->wait_until_idle_();
   }
 
   ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
-  this->command(0x02);
-  this->wait_until_idle_();
+  // this->command(0x02);
+  // this->wait_until_idle_();
   ESP_LOGI(TAG, "After command(0x02) (>> power off)");
 
   this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
