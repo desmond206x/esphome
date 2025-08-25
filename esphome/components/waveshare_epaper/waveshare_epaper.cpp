@@ -4673,7 +4673,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
   this->data(0x07);
 }
 
-void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
+void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->reset_();
 
   this->command(0X00);
