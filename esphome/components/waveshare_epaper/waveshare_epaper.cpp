@@ -4813,7 +4813,7 @@ void WaveshareEPaper7P5InBV3PBWR::turn_on_display_() {
 
 int WaveshareEPaper7P5InBV3PBWR::get_width_internal() { return 800; }
 int WaveshareEPaper7P5InBV3PBWR::get_height_internal() { return 480; }
-uint32_t WaveshareEPaper7P5InBV3PBWR::idle_timeout_() { return 10000; }
+// uint32_t WaveshareEPaper7P5InBV3PBWR::idle_timeout_() { return 10000; }
 void WaveshareEPaper7P5InBV3PBWR::dump_config() {
   LOG_DISPLAY("", "Waveshare E-Paper", this);
   ESP_LOGCONFIG(TAG, "  Model: 7.5in-bv2 Partial Update BWR-Mode");
