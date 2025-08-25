@@ -4719,16 +4719,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
     this->data(0x01);
 
-    this->command(0x10);
+    this->command(0x13);
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i]);
     }
 
-    delay(100);  // NOLINT
-    this->wait_until_idle_();
-
     this->turn_on_display_();
+
+    this->command(0x92);
   }
 
   ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
