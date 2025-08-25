@@ -4749,7 +4749,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     // delay(2);
     // for (uint32_t i = 0; i < buf_len; i++) {
     //   this->data(this->buffer_[i + buf_len]);
-    }
+    // }
 
     // delay(100);  // NOLINT
     // this->wait_until_idle_();
