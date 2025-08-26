@@ -4291,29 +4291,17 @@ void HOT WaveshareEPaper7P5InV2P::display() {
     this->command(0x91);
     this->command(0x90);
 
-    // Horizontal start/end channel bank (HRST/HRED)
-    this->data(0);
-    this->data(0);
-    this->data((get_width_internal() - 1) / 256);
-    this->data((get_width_internal() - 1) % 256);
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_width_internal() - 1) >> 8 & 0xFF);
+    this->data((get_width_internal() - 1) & 0xFF);
 
-    // Vertical start/end line (VRST/VRED)
-    this->data(0);
-    this->data(0);
-    this->data((get_height_internal() - 1) / 256);
-    this->data((get_height_internal() - 1) % 256);
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_height_internal() - 1) >> 8 & 0xFF);
+    this->data((get_height_internal() - 1) & 0xFF);
 
-    // this->data(0x00);
-    // this->data(0x00);
-    // this->data((get_width_internal() - 1) >> 8 & 0xFF);
-    // this->data((get_width_internal() - 1) & 0xFF);
-
-    // this->data(0x00);
-    // this->data(0x00);
-    // this->data((get_height_internal() - 1) >> 8 & 0xFF);
-    // this->data((get_height_internal() - 1) & 0xFF);
-
-    // this->data(0x01);
+    this->data(0x01);
 
     this->command(0x13);
     delay(2);
@@ -4783,16 +4771,28 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x91);
       this->command(0x90);
 
-      this->data(0x00);
-      this->data(0x00);
-      this->data((get_width_internal() - 1) >> 8 & 0xFF);
-      this->data((get_width_internal() - 1) & 0xFF);
+      // Horizontal start/end channel bank (HRST/HRED)
+      this->data(0);
+      this->data(0);
+      this->data((get_width_internal() - 1) / 256);
+      this->data((get_width_internal() - 1) % 256);
 
-      this->data(0x00);
-      this->data(0x00);
-      this->data((get_height_internal() - 1) >> 8 & 0xFF);
-      this->data((get_height_internal() - 1) & 0xFF);
-      this->data(0x01);
+      // Vertical start/end line (VRST/VRED)
+      this->data(0);
+      this->data(0);
+      this->data((get_height_internal() - 1) / 256);
+      this->data((get_height_internal() - 1) % 256);
+
+      // this->data(0x00);
+      // this->data(0x00);
+      // this->data((get_width_internal() - 1) >> 8 & 0xFF);
+      // this->data((get_width_internal() - 1) & 0xFF);
+
+      // this->data(0x00);
+      // this->data(0x00);
+      // this->data((get_height_internal() - 1) >> 8 & 0xFF);
+      // this->data((get_height_internal() - 1) & 0xFF);
+      // this->data(0x01);
 
       // this->command(0x10);
       // delay(2);
@@ -4803,7 +4803,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x13);
       delay(2);
       for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(~this->buffer_[i]);
+        this->data(this->buffer_[i]);
       }
 
       // for (size_t i = 0; i < this->get_buffer_length_(); i++) {
