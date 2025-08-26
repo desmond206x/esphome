@@ -4694,10 +4694,10 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
 }
 
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
-  ESP_LOGI(TAG, "buffer: " + this->buffer_);
+  ESP_LOGI(TAG, "buffer: " + this->buffer_value);
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
   ESP_LOGI(TAG, "Power on the display and hat");
-  ESP_LOGI(TAG, "buf_len " + this->buf_len);
+  ESP_LOGI(TAG, "buf_len " + buf_len);
 
   // if (this->full_update_every_ == 1) {
   if (this->at_update_ == 0) {
