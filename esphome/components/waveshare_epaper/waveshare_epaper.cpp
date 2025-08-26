@@ -4761,9 +4761,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "Partial refresh");
       this->init_display_partial_();
 
-      // Enable partial refresh
-      // this->command(0xE5);
-      // this->data(0x6E);
+      Enable partial refresh
+      this->command(0xE5);
+      this->data(0x6E);
 
       // Activate partial refresh and set window bounds
       this->command(0x91);
@@ -4780,16 +4780,20 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->data((get_height_internal() - 1) & 0xFF);
       this->data(0x01);
 
-      // this->command(0x10);
-      // delay(2);
-      // for (uint32_t i = 0; i < buf_len; i++) {
-      //   this->data(0xFF);
-      // }
+      this->command(0x10);
+      delay(2);
+      for (uint32_t i = 0; i < buf_len; i++) {
+        this->data(this->old_buffer_[i]);
+      }
 
       this->command(0x13);
       delay(2);
       for (uint32_t i = 0; i < buf_len; i++) {
         this->data(this->buffer_[i]);
+      }
+
+      for (size_t i = 0; i < this->get_buffer_length_(); i++) {
+        this->old_buffer_[i] = this->buffer_[i];
       }
 
       this->turn_on_display_();
@@ -4808,6 +4812,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   ESP_LOGI(TAG, "After command(0x02) (>> power off)");
 
   this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
+  ESP_LOGI(TAG, "At Update is at: " + this->at_update_);
 }
 
 void WaveshareEPaper7P5InBV3PBWR::turn_on_display_() {
