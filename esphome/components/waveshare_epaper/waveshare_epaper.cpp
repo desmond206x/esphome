@@ -4761,7 +4761,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "Partial refresh");
       this->init_display_partial_();
 
-      Enable partial refresh
+      // Enable partial refresh
       this->command(0xE5);
       this->data(0x6E);
 
