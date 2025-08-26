@@ -4313,7 +4313,7 @@ void HOT WaveshareEPaper7P5InV2P::display() {
     // this->data((get_height_internal() - 1) >> 8 & 0xFF);
     // this->data((get_height_internal() - 1) & 0xFF);
 
-    this->data(0x01);
+    // this->data(0x01);
 
     this->command(0x13);
     delay(2);
