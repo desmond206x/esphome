@@ -4694,8 +4694,10 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
 }
 
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
+  ESP_LOGI(TAG, "buffer: " + this->buffer_);
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
   ESP_LOGI(TAG, "Power on the display and hat");
+  ESP_LOGI(TAG, "buf_len " + this->buf_len);
 
   // if (this->full_update_every_ == 1) {
   if (this->at_update_ == 0) {
@@ -4780,11 +4782,11 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->data((get_height_internal() - 1) & 0xFF);
       this->data(0x01);
 
-      this->command(0x10);
-      delay(2);
-      for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(this->old_buffer_[i]);
-      }
+      // this->command(0x10);
+      // delay(2);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(this->old_buffer_[i]);
+      // }
 
       this->command(0x13);
       delay(2);
@@ -4792,9 +4794,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         this->data(this->buffer_[i]);
       }
 
-      for (size_t i = 0; i < this->get_buffer_length_(); i++) {
-        this->old_buffer_[i] = this->buffer_[i];
-      }
+      // for (size_t i = 0; i < this->get_buffer_length_(); i++) {
+      //   this->old_buffer_[i] = this->buffer_[i];
+      // }
 
       this->turn_on_display_();
 
