@@ -4697,9 +4697,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   // ESP_LOGI(TAG, "buffer: " + this->buffer_);
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
   ESP_LOGI(TAG, "Power on the display and hat");
-  ESP_LOGI(TAG, "buf_len " + buf_len);
+  ESP_LOGI(TAG, "buf_len " + buf_len.c_str());
 
-  ESP_LOGI(TAG, "full update every " + this->full_update_every_);
+  ESP_LOGI(TAG, "full update every " + this->full_update_every_.c_str());
 
   // if (this->full_update_every_ == 1) {
   if (this->at_update_ == 0) {
@@ -4828,7 +4828,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   ESP_LOGI(TAG, "After command(0x02) (>> power off)");
 
   this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
-  ESP_LOGI(TAG, "At Update is at: " + this->at_update_);
+  ESP_LOGI(TAG, "At Update is at: " + this->at_update_.c_str());
 }
 
 void WaveshareEPaper7P5InBV3PBWR::turn_on_display_() {
