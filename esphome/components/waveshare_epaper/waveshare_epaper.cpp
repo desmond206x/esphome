@@ -4699,6 +4699,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   ESP_LOGI(TAG, "Power on the display and hat");
   ESP_LOGI(TAG, "buf_len " + buf_len);
 
+  ESP_LOGI(TAG, "full update every " + this->full_update_every_);
+
   // if (this->full_update_every_ == 1) {
   if (this->at_update_ == 0) {
     ESP_LOGI(TAG, "Full refresh");
@@ -4781,7 +4783,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->data(0);
       this->data(0);
       this->data((get_height_internal() - 1) / 256);
-      this->data((get_height_internal() - 1) % 256);
+      this->data((get_height_internal() - 1) % 256); // nicht besser scheinbar
 
       // this->data(0x00);
       // this->data(0x00);
