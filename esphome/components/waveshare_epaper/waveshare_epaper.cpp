@@ -4733,92 +4733,92 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     // this->data(0x07);
 
     // if (this->at_update_ == 0) {
-    //   ESP_LOGI(TAG, "Fast refresh");
+      ESP_LOGI(TAG, "Fast refresh");
 
-    //   this->init_display_fast_();
+      this->init_display_fast_();
 
-    //   // // Enable fast refresh
-    //   // this->command(0xE5);
-    //   // this->data(0x5A);
-
-    //   // this->command(0x92);
-
-    //   this->command(0x10);
-    //   delay(2);
-    //   for (uint32_t i = 0; i < buf_len; i++) {
-    //     this->data(this->buffer_[i]);
-    //   }
-
-    //   // delay(100);  // NOLINT
-    //   // this->wait_until_idle_();
-
-    //   this->command(0x13);
-    //   delay(2);
-    //   for (uint32_t i = 0; i < buf_len; i++) {
-    //     this->data(this->buffer_[i + buf_len]);
-    //   }
-
-    //   this->turn_on_display_();
-    //   delay(100);  // NOLINT
-    //   this->wait_until_idle_();
-    // } else {
-      ESP_LOGI(TAG, "Partial refresh");
-      this->init_display_partial_();
-
-      // // Enable partial refresh
+      // // Enable fast refresh
       // this->command(0xE5);
-      // this->data(0x6E);
+      // this->data(0x5A);
 
-      // Activate partial refresh and set window bounds
-      this->command(0x91);
-      this->command(0x90);
+      // this->command(0x92);
 
-      // Horizontal start/end channel bank (HRST/HRED)
-      this->data(0);
-      this->data(0);
-      this->data((get_width_internal() - 1) / 256);
-      this->data((get_width_internal() - 1) % 256);
-
-      // Vertical start/end line (VRST/VRED)
-      this->data(0);
-      this->data(0);
-      this->data((get_height_internal() - 1) / 256);
-      this->data((get_height_internal() - 1) % 256); // nicht besser scheinbar
-
-      // this->data(0x00);
-      // this->data(0x00);
-      // this->data((get_width_internal() - 1) >> 8 & 0xFF);
-      // this->data((get_width_internal() - 1) & 0xFF);
-
-      // this->data(0x00);
-      // this->data(0x00);
-      // this->data((get_height_internal() - 1) >> 8 & 0xFF);
-      // this->data((get_height_internal() - 1) & 0xFF);
-      // this->data(0x01);
-
-      // this->command(0x10);
-      // delay(2);
-      // for (uint32_t i = 0; i < buf_len; i++) {
-      //   this->data(this->old_buffer_[i]);
-      // }
-
-      this->command(0x13);
+      this->command(0x10);
       delay(2);
       for (uint32_t i = 0; i < buf_len; i++) {
         this->data(this->buffer_[i]);
       }
 
-      // for (size_t i = 0; i < this->get_buffer_length_(); i++) {
-      //   this->old_buffer_[i] = this->buffer_[i];
-      // }
+      // delay(100);  // NOLINT
+      // this->wait_until_idle_();
+
+      this->command(0x13);
+      delay(2);
+      for (uint32_t i = 0; i < buf_len; i++) {
+        this->data(this->buffer_[i + buf_len]);
+      }
 
       this->turn_on_display_();
-
+      delay(100);  // NOLINT
       this->wait_until_idle_();
+    // } else {
+      // ESP_LOGI(TAG, "Partial refresh");
+      // this->init_display_partial_();
 
-      this->command(0x92);
+      // // // Enable partial refresh
+      // // this->command(0xE5);
+      // // this->data(0x6E);
 
-      this->wait_until_idle_();
+      // // Activate partial refresh and set window bounds
+      // this->command(0x91);
+      // this->command(0x90);
+
+      // // Horizontal start/end channel bank (HRST/HRED)
+      // this->data(0);
+      // this->data(0);
+      // this->data((get_width_internal() - 1) / 256);
+      // this->data((get_width_internal() - 1) % 256);
+
+      // // Vertical start/end line (VRST/VRED)
+      // this->data(0);
+      // this->data(0);
+      // this->data((get_height_internal() - 1) / 256);
+      // this->data((get_height_internal() - 1) % 256); // nicht besser scheinbar
+
+      // // this->data(0x00);
+      // // this->data(0x00);
+      // // this->data((get_width_internal() - 1) >> 8 & 0xFF);
+      // // this->data((get_width_internal() - 1) & 0xFF);
+
+      // // this->data(0x00);
+      // // this->data(0x00);
+      // // this->data((get_height_internal() - 1) >> 8 & 0xFF);
+      // // this->data((get_height_internal() - 1) & 0xFF);
+      // // this->data(0x01);
+
+      // // this->command(0x10);
+      // // delay(2);
+      // // for (uint32_t i = 0; i < buf_len; i++) {
+      // //   this->data(this->old_buffer_[i]);
+      // // }
+
+      // this->command(0x13);
+      // delay(2);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(this->buffer_[i]);
+      // }
+
+      // // for (size_t i = 0; i < this->get_buffer_length_(); i++) {
+      // //   this->old_buffer_[i] = this->buffer_[i];
+      // // }
+
+      // this->turn_on_display_();
+
+      // this->wait_until_idle_();
+
+      // this->command(0x92);
+
+      // this->wait_until_idle_();
     // }
   }
 
