@@ -4816,18 +4816,19 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
     // this->data(0x01);
 
-      this->command(0x10);
-      delay(2);
-      for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(this->old_buffer_[i]);
-      }
+      // this->command(0x10);
+      // delay(2);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(this->old_buffer_[i]);
+      // }
       
       // Idee: 0xFF oder so als Basis zu schreiben und dann nur den Buffer dazupacken für das partial Update
       this->command(0x13);
       delay(2);
       for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(this->buffer_[i]);
-        this->old_buffer_[i] = this->buffer_[i];
+        this->data(0xFF);
+        // this->data(this->buffer_[i]);
+        // this->old_buffer_[i] = this->buffer_[i];
       }
 
       this->command(0x11);
