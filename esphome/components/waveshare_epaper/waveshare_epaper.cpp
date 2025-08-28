@@ -4689,24 +4689,78 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
 void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->reset_();
 
-  this->command(0x00);
-  this->data(0x1F);
+  // this->command(0x00);
+  // this->data(0x1F);
 
+  // this->command(0x04);
+  // delay(100);  // NOLINT
+  // this->wait_until_idle_();
+
+  // this->command(0xE0);
+  // this->data(0x02);
+
+  // // Force Temperature
+  // this->command(0xE5);
+  // this->data(0x6E);
+
+  // // VCOM and Data interval Setting
+  // this->command(0x50);
+  // this->data(0xA9); // 0xA9
+  // this->data(0x07);
+
+  // // --
+
+  // COMMAND POWER SETTING
+  this->command(0x01);
+  this->data(0x07);
+  this->data(0x07);
+  this->data(0x3f);
+  this->data(0x3f);
+
+  // COMMAND BOOSTER SOFT START
+  this->command(0x06);
+  this->data(0x17);
+  this->data(0x17);
+  this->data(0x28);
+  this->data(0x17);
+
+  // COMMAND POWER DRIVER HAT UP
   this->command(0x04);
   delay(100);  // NOLINT
   this->wait_until_idle_();
 
+  // COMMAND PANEL SETTING
+  this->command(0x00);
+  this->data(0x1F);
+
+  // COMMAND RESOLUTION SETTING
+  this->command(0x61);
+  this->data(0x03);
+  this->data(0x20);
+  this->data(0x01);
+  this->data(0xE0);
+
+  // COMMAND DUAL SPI MM_EN, DUSPI_EN
+  this->command(0x15);
+  this->data(0x00);
+
+  // COMMAND VCOM AND DATA INTERVAL SETTING
+  this->command(0x50);
+  this->data(0x10);
+  this->data(0x07);
+
+  // COMMAND TCON SETTING
+  this->command(0x60);
+  this->data(0x22);
+
+  // COMMAND ENABLE FAST UPDATE
   this->command(0xE0);
   this->data(0x02);
-
-  // Force Temperature
   this->command(0xE5);
-  this->data(0x6E);
+  this->data(0x5A);
 
-  // VCOM and Data interval Setting
-  this->command(0x50);
-  this->data(0xA9); // 0xA9
-  this->data(0x07);
+  // COMMAND POWER DRIVER HAT DOWN
+  this->command(0x02);
 }
 
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
@@ -4804,12 +4858,11 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->data(0x01);
 
-      this->command(0x10);
-      delay(2);
-      for (uint32_t i = 0; i < buf_len; i++) {
-        // this->data(this->old_buffer_[i]);
-        this->data(~this->buffer_[i]);
-      }
+      // this->command(0x10);
+      // delay(2);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(this->old_buffer_[i]);
+      // }
       
       // Idee: 0xFF oder so als Basis zu schreiben und dann nur den Buffer dazupacken für das partial Update
       this->command(0x13);
@@ -4817,7 +4870,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
         this->data(this->buffer_[i]);
-        this->old_buffer_[i] = this->buffer_[i];
+        // // this->old_buffer_[i] = this->buffer_[i];
       }
 
       // this->command(0x11);
@@ -4826,7 +4879,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       
       this->wait_until_idle_();
 
-      // this->command(0x92);
+      this->command(0x92);
 
       // this->wait_until_idle_();
     // }
