@@ -4811,16 +4811,16 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x13);
       delay(2);
       for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(~this->buffer_[i]);
+        this->data(this->buffer_[i]);
       }
 
       this->command(0x11);
+      
+      this->turn_on_display_();
 
       this->command(0x92);
 
       this->wait_until_idle_();
-
-      this->turn_on_display_();
 
       this->wait_until_idle_();
     // }
