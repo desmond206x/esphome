@@ -4699,9 +4699,9 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->command(0xE0);
   // this->data(0x02);
 
-  // // Force Temperature
-  // this->command(0xE5);
-  // this->data(0x6E);
+  // Force Temperature
+  this->command(0xE5);
+  this->data(0x6E);
 
   // // VCOM and Data interval Setting
   // this->command(0x50);
@@ -4721,10 +4721,15 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->command(0x15);
   this->data(0x00);
 
+  // // COMMAND VCOM AND DATA INTERVAL SETTING
+  // this->command(0x50);
+  // this->data(0x20); // 0x10 0x11
+  // this->data(0x00); // 0x07
+
   // COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
-  this->data(0x20); // 0x10 0x11
-  this->data(0x00); // 0x07
+  this->data(0x11); // 0x10 0x11
+  this->data(0x07); // 0x07
 
   // COMMAND TCON SETTING
   this->command(0x60);
@@ -4880,18 +4885,17 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->data(0x01);
 
-      // this->command(0x10);
-      // delay(2);
-      // for (uint32_t i = 0; i < buf_len; i++) {
-      //   this->data(this->old_buffer_[i]);
-      // }
+      this->command(0x10);
+      for (uint32_t i = 0; i < buf_len; i++) {
+        this->data(this->old_buffer_[i]);
+      }
       
       // Idee: 0xFF oder so als Basis zu schreiben und dann nur den Buffer dazupacken für das partial Update
       this->command(0x13);
       for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(0xFF);
-        // this->data(this->buffer_[i]);
-        // // this->old_buffer_[i] = this->buffer_[i];
+        // this->data(0xFF);
+        this->data(this->buffer_[i]);
+        this->old_buffer_[i] = this->buffer_[i];
       }
 
       // this->command(0x11);
@@ -4900,9 +4904,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       delay(100);  // NOLINT
       this->wait_until_idle_();
 
-      // this->command(0x92);
+      this->command(0x92);
 
-      // this->wait_until_idle_();
+      this->wait_until_idle_();
     // }
   }
 
