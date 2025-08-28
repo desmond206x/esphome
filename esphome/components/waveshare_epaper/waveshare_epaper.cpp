@@ -4611,9 +4611,9 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->data(0x28);
   this->data(0x17);
 
-  // // VCOM DC Setting
-  // this->command(0x82);
-  // this->data(0x24);  // VCOM=-1.9V
+  // VCOM DC Setting
+  this->command(0x82);
+  this->data(0x24);  // VCOM=-1.9V
 
   // POWER ON
   this->command(0x04);
