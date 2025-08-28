@@ -4816,18 +4816,18 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->command(0x11);
 
-      for (size_t i = 0; i < this->get_buffer_length_(); i++) {
-        this->old_buffer_[i] = this->buffer_[i];
-      }
+      this->command(0x92);
+
+      this->wait_until_idle_();
 
       this->turn_on_display_();
 
       this->wait_until_idle_();
-
-      this->command(0x92);
-
-      this->wait_until_idle_();
     // }
+  }
+
+  for (size_t i = 0; i < this->get_buffer_length_(); i++) {
+    this->old_buffer_[i] = this->buffer_[i];
   }
 
   ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
