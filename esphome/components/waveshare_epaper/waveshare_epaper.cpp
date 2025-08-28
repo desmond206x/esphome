@@ -4689,12 +4689,12 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
 void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->reset_();
 
-  // this->command(0x00);
-  // this->data(0x1F);
+  this->command(0x00);
+  this->data(0x1F);
 
-  // this->command(0x04);
-  // delay(100);  // NOLINT
-  // this->wait_until_idle_();
+  this->command(0x04);
+  delay(100);  // NOLINT
+  this->wait_until_idle_();
 
   // this->command(0xE0);
   // this->data(0x02);
@@ -4708,36 +4708,13 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->data(0xA9); // 0xA9
   // this->data(0x07);
 
-  // // --
-
-  // COMMAND POWER SETTING
-  this->command(0x01);
-  this->data(0x07);
-  this->data(0x07);
-  this->data(0x3f);
-  this->data(0x3f);
-
-  // COMMAND BOOSTER SOFT START
-  this->command(0x06);
-  this->data(0x17);
-  this->data(0x17);
-  this->data(0x28);
-  this->data(0x17);
-
-  // COMMAND POWER DRIVER HAT UP
-  this->command(0x04);
-  delay(100);  // NOLINT
-  this->wait_until_idle_();
-
-  // COMMAND PANEL SETTING
-  this->command(0x00);
-  this->data(0x1F);
+  // --
 
   // COMMAND RESOLUTION SETTING
   this->command(0x61);
-  this->data(0x03);
+  this->data(0x03);  // source 800
   this->data(0x20);
-  this->data(0x01);
+  this->data(0x01);  // gate 480
   this->data(0xE0);
 
   // COMMAND DUAL SPI MM_EN, DUSPI_EN
@@ -4746,21 +4723,66 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
 
   // COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
-  this->data(0x10);
-  this->data(0x07);
+  this->data(0x20); // 0x10 0x11
+  this->data(0x00); // 0x07
 
   // COMMAND TCON SETTING
   this->command(0x60);
   this->data(0x22);
 
-  // COMMAND ENABLE FAST UPDATE
-  this->command(0xE0);
-  this->data(0x02);
-  this->command(0xE5);
-  this->data(0x5A);
+  // // --
 
-  // COMMAND POWER DRIVER HAT DOWN
-  this->command(0x02);
+  // // COMMAND POWER SETTING
+  // this->command(0x01);
+  // this->data(0x07);
+  // this->data(0x07);
+  // this->data(0x3f);
+  // this->data(0x3f);
+
+  // // COMMAND BOOSTER SOFT START
+  // this->command(0x06);
+  // this->data(0x17);
+  // this->data(0x17);
+  // this->data(0x28);
+  // this->data(0x17);
+
+  // // COMMAND POWER DRIVER HAT UP
+  // this->command(0x04);
+  // delay(100);  // NOLINT
+  // this->wait_until_idle_();
+
+  // // COMMAND PANEL SETTING
+  // this->command(0x00);
+  // this->data(0x1F);
+
+  // // COMMAND RESOLUTION SETTING
+  // this->command(0x61);
+  // this->data(0x03);
+  // this->data(0x20);
+  // this->data(0x01);
+  // this->data(0xE0);
+
+  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
+  // this->command(0x15);
+  // this->data(0x00);
+
+  // // COMMAND VCOM AND DATA INTERVAL SETTING
+  // this->command(0x50);
+  // this->data(0x10);
+  // this->data(0x07);
+
+  // // COMMAND TCON SETTING
+  // this->command(0x60);
+  // this->data(0x22);
+
+  // // COMMAND ENABLE FAST UPDATE
+  // this->command(0xE0);
+  // this->data(0x02);
+  // this->command(0xE5);
+  // this->data(0x5A);
+
+  // // COMMAND POWER DRIVER HAT DOWN
+  // this->command(0x02);
 }
 
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
