@@ -4705,7 +4705,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
 
   // VCOM and Data interval Setting
   this->command(0x50);
-  this->data(0x10); // 0xA9
+  this->data(0xA9); // 0xA9
   this->data(0x07);
 }
 
@@ -4782,39 +4782,27 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "Partial refresh");
       this->init_display_partial_();
 
-      // // Enable partial refresh
-      // this->command(0xE5);
-      // this->data(0x6E);
+      // Enable partial refresh
+      this->command(0xE5);
+      this->data(0x6E);
 
       // Activate partial refresh and set window bounds
       this->command(0x91);
       this->command(0x90);
 
-      this->data(0x00);
-      this->data(0x00);
-      this->data((get_width_internal() - 1) >> 8 & 0xFF);
-      this->data((get_width_internal() - 1) & 0xFF);
+      // Horizontal start/end channel bank (HRST/HRED)
+      this->data(0);
+      this->data(0);
+      this->data((get_width_internal() - 1) / 256);
+      this->data((get_width_internal() - 1) % 256);
 
-      this->data(0x00);
-      this->data(0x00);
-      this->data((get_height_internal() - 1) >> 8 & 0xFF);
-      this->data((get_height_internal() - 1) & 0xFF);
+      // Vertical start/end line (VRST/VRED)
+      this->data(0);
+      this->data(0);
+      this->data((get_height_internal() - 1) / 256);
+      this->data((get_height_internal() - 1) % 256);
 
       this->data(0x01);
-
-    //       // Horizontal start/end channel bank (HRST/HRED)
-    // this->data(0);
-    // this->data(0);
-    // this->data((get_width_internal() - 1) / 256);
-    // this->data((get_width_internal() - 1) % 256);
-
-    // // Vertical start/end line (VRST/VRED)
-    // this->data(0);
-    // this->data(0);
-    // this->data((get_height_internal() - 1) / 256);
-    // this->data((get_height_internal() - 1) % 256);
-
-    // this->data(0x01);
 
       // this->command(0x10);
       // delay(2);
