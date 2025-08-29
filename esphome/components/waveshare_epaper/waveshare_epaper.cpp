@@ -4738,9 +4738,9 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->data(0x01);  // gate 480
   // this->data(0xE0);
 
-  // COMMAND DUAL SPI MM_EN, DUSPI_EN
-  this->command(0x15);
-  this->data(0x00);
+  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
+  // this->command(0x15);
+  // this->data(0x00);
 
   // // // COMMAND VCOM AND DATA INTERVAL SETTING
   // // this->command(0x50);
@@ -4752,9 +4752,9 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->data(0x11); // 0x10 0x11
   // this->data(0x07); // 0x07
 
-  // COMMAND TCON SETTING
-  this->command(0x60);
-  this->data(0x22);
+  // // COMMAND TCON SETTING
+  // this->command(0x60);
+  // this->data(0x22);
 
   // // --
 
@@ -4895,43 +4895,44 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // Horizontal start/end channel bank (HRST/HRED)
       this->data(0);
       this->data(0);
-      this->data((get_width_internal() - 1) / 256);
-      this->data((get_width_internal() - 1) % 256);
+      this->data((get_width_internal() ) / 256);
+      this->data((get_width_internal() ) % 256 - 1);
 
       // Vertical start/end line (VRST/VRED)
       this->data(0);
       this->data(0);
-      this->data((get_height_internal() - 1) / 256);
-      this->data((get_height_internal() - 1) % 256);
+      this->data((get_height_internal() ) / 256);
+      this->data((get_height_internal() ) % 256 -1);
 
       this->data(0x01);
 
-      this->command(0x10);
-      for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(this->old_buffer_[i]);
-      }
+      // this->command(0x10);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(this->old_buffer_[i]);
+      // }
 
-      this->command(0x11);
+      // this->command(0x11);
 
       // Idee: 0xFF oder so als Basis zu schreiben und dann nur den Buffer dazupacken für das partial Update
       this->command(0x13);
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
-        this->data(old_buffer_[i] ^ this->buffer_[i]);
-        this->old_buffer_[i] = this->buffer_[i];
+        // this->data(old_buffer_[i] ^ this->buffer_[i]);
+        // this->old_buffer_[i] = this->buffer_[i];
+        this->data(this->buffer_[i]);
       }
       
-      this->command(0x15);
-      this->data(0x00);
+      // this->command(0x15);
+      // this->data(0x00);
 
       
       this->turn_on_display_();
-      delay(100);  // NOLINT
+      delay(200);  // NOLINT
       this->wait_until_idle_();
 
-      this->command(0x92);
+      // this->command(0x92);
 
-      this->wait_until_idle_();
+      // this->wait_until_idle_();
     // }
   }
 
