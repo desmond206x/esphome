@@ -4591,39 +4591,14 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   // COMMAND POWER SETTING
   this->command(0x01);
   this->data(0x07);
-  this->data(0x07); // 17
+  this->data(0x07);
   this->data(0x3F);
-  this->data(0x26); // 3F
-  this->data(0x11); // del
-
-
-  // // 1-0=11: internal power
-  // this->data(0x07);  // VRS_EN=1, VS_EN=1, VG_EN=1
-  // this->data(0x17);  // VGH&VGL ??? VCOM_SLEW=1 but this is fixed, VG_LVL[2:0]=111 => VGH=20V VGL=-20V, it could be 0x07
-  // this->data(0x3F);  // VSH=15V?
-  // this->data(0x26);  // VSL=-9.4V?
-  // this->data(0x11);  // VSHR=5.8V?
-
-  // COMMAND BOOSTER SOFT START
-  this->command(0x06);
-  this->data(0x17);
-  this->data(0x17);
-  this->data(0x28);
-  this->data(0x17);
-
-  // VCOM DC Setting
-  this->command(0x82);
-  this->data(0x24);  // VCOM=-1.9V
-
-  // POWER ON
-  this->command(0x04);
-  delay(100);  // NOLINT
-  this->wait_until_idle_();
+  this->data(0x3F);
 
   // COMMAND PANEL SETTING
   this->command(0x00);
   this->data(0x0F);
-
+  
   // COMMAND RESOLUTION SETTING
   this->command(0x61);
   this->data(0x03);  // source 800
@@ -4635,30 +4610,85 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->command(0x15);
   this->data(0x00);
 
-  // COMMAND VCOM AND DATA INTERVAL SETTING
+// COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
-  this->data(0x20); // 0x10 0x11
-  this->data(0x00); // 0x07
+  this->data(0x11);
+  this->data(0x07);
 
   // COMMAND TCON SETTING
   this->command(0x60);
   this->data(0x22);
 
-  // // Resolution setting
-  // this->command(0x65);
-  // this->data(0x00);
-  // this->data(0x00);  // 800*480
-  // this->data(0x00);
+  // // COMMAND POWER SETTING
+  // this->command(0x01);
+  // this->data(0x07);
+  // this->data(0x07); // 17
+  // this->data(0x3F);
+  // this->data(0x26); // 3F
+  // this->data(0x11); // del
+
+  // // // 1-0=11: internal power
+  // // this->data(0x07);  // VRS_EN=1, VS_EN=1, VG_EN=1
+  // // this->data(0x17);  // VGH&VGL ??? VCOM_SLEW=1 but this is fixed, VG_LVL[2:0]=111 => VGH=20V VGL=-20V, it could be 0x07
+  // // this->data(0x3F);  // VSH=15V?
+  // // this->data(0x26);  // VSL=-9.4V?
+  // // this->data(0x11);  // VSHR=5.8V?
+
+  // // COMMAND BOOSTER SOFT START
+  // this->command(0x06);
+  // this->data(0x17);
+  // this->data(0x17);
+  // this->data(0x28);
+  // this->data(0x17);
+
+  // // VCOM DC Setting
+  // this->command(0x82);
+  // this->data(0x24);  // VCOM=-1.9V
+
+  // // POWER ON
+  // this->command(0x04);
+  // delay(100);  // NOLINT
+  // this->wait_until_idle_();
+
+  // // COMMAND PANEL SETTING
+  // this->command(0x00);
+  // this->data(0x0F);
+
+  // // COMMAND RESOLUTION SETTING
+  // this->command(0x61);
+  // this->data(0x03);  // source 800
+  // this->data(0x20);
+  // this->data(0x01);  // gate 480
+  // this->data(0xE0);
+
+  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
+  // this->command(0x15);
   // this->data(0x00);
 
-  // // COMMAND ENABLE FAST UPDATE
-  // this->command(0xE0);
-  // this->data(0x02);
-  // this->command(0xE5);
-  // this->data(0x5A);
+  // // COMMAND VCOM AND DATA INTERVAL SETTING
+  // this->command(0x50);
+  // this->data(0x20); // 0x10 0x11
+  // this->data(0x00); // 0x07
 
-  // // COMMAND POWER DRIVER HAT DOWN
-  // this->command(0x02);
+  // // COMMAND TCON SETTING
+  // this->command(0x60);
+  // this->data(0x22);
+
+  // // // Resolution setting
+  // // this->command(0x65);
+  // // this->data(0x00);
+  // // this->data(0x00);  // 800*480
+  // // this->data(0x00);
+  // // this->data(0x00);
+
+  // // // COMMAND ENABLE FAST UPDATE
+  // // this->command(0xE0);
+  // // this->data(0x02);
+  // // this->command(0xE5);
+  // // this->data(0x5A);
+
+  // // // COMMAND POWER DRIVER HAT DOWN
+  // // this->command(0x02);
 };
 
 void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
@@ -4824,6 +4854,25 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     ESP_LOGI(TAG, "Full refresh");
     this->init_display_();
 
+    this->command(0x91);
+
+    uint16_t x = get_width_internal();
+    uint16_t y = get_height_internal();
+    uint16_t xe = (x + w - 1) | 0x0007; // byte boundary inclusive (last byte)
+    uint16_t ye = y + h - 1;
+    x &= 0xFFF8; // byte boundary
+    xe |= 0x0007; // byte boundary
+    this->command(0x90); // partial window
+    this->data(x / 256);
+    this->data(x % 256);
+    this->data(xe / 256);
+    this->data(xe % 256);
+    this->data(y / 256);
+    this->data(y % 256);
+    this->data(ye / 256);
+    this->data(ye % 256);
+    this->data(0x00);
+
     this->command(0x04);
     delay(200);  // NOLINT
     this->wait_until_idle_();
@@ -4840,6 +4889,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i + buf_len]);
     }
+
+    this->command(0x92);
 
     this->turn_on_display_();
     delay(100);  // NOLINT
@@ -4882,7 +4933,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->wait_until_idle_();
     // } else {
       ESP_LOGI(TAG, "Partial refresh");
-      this->init_display_partial_();
+      // this->init_display_partial_();
+      this->init_display_();
 
       // Enable partial refresh
       this->command(0xE5);
