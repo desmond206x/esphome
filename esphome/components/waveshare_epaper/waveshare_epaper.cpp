@@ -4854,7 +4854,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     ESP_LOGI(TAG, "Full refresh");
     this->init_display_();
 
-    this->command(0x02);
+    this->command(0x04);
     this->wait_until_idle_();
 
     this->command(0x91);
