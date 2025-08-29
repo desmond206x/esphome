@@ -4856,22 +4856,20 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
     this->command(0x91);
 
-    uint16_t x = 0;
-    uint16_t y = 0;
-    uint16_t xe = (x + this->get_width_internal() - 1) | 0x0007; // byte boundary inclusive (last byte)
-    uint16_t ye = y + this->get_height_internal() - 1;
-    x &= 0xFFF8; // byte boundary
-    xe |= 0x0007; // byte boundary
+    
     this->command(0x90); // partial window
-    this->data(x / 256);
-    this->data(x % 256);
-    this->data(xe / 256);
-    this->data(xe % 256);
-    this->data(y / 256);
-    this->data(y % 256);
-    this->data(ye / 256);
-    this->data(ye % 256);
-    this->data(0x00);
+    // Horizontal start/end channel bank (HRST/HRED)
+    this->data(0);
+    this->data(0);
+    this->data((get_width_internal() ) / 256);
+    this->data((get_width_internal() ) % 256 - 1);
+
+    // Vertical start/end line (VRST/VRED)
+    this->data(0);
+    this->data(0);
+    this->data((get_height_internal() ) / 256);
+    this->data((get_height_internal() ) % 256 -1);
+    this->data(0);
 
     this->command(0x04);
     delay(200);  // NOLINT
