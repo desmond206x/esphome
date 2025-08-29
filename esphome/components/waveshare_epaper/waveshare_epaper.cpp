@@ -4910,7 +4910,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       for (uint32_t i = 0; i < buf_len; i++) {
         this->data(this->old_buffer_[i]);
       }
-      
+
+      this->command(0x11);
+
       // Idee: 0xFF oder so als Basis zu schreiben und dann nur den Buffer dazupacken für das partial Update
       this->command(0x13);
       for (uint32_t i = 0; i < buf_len; i++) {
@@ -4919,7 +4921,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         this->old_buffer_[i] = this->buffer_[i];
       }
       
-      this->command(0x11);
+      this->command(0x15);
+      this->data(0x00);
+
       
       // this->turn_on_display_();
       // delay(100);  // NOLINT
