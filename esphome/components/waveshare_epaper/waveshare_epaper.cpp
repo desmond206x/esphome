@@ -4854,8 +4854,10 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     ESP_LOGI(TAG, "Full refresh");
     this->init_display_();
 
-    this->command(0x91);
+    this->command(0x02);
+    this->wait_until_idle_();
 
+    this->command(0x91);
     
     this->command(0x90); // partial window
     // Horizontal start/end channel bank (HRST/HRED)
