@@ -4854,9 +4854,6 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     ESP_LOGI(TAG, "Full refresh");
     this->init_display_();
 
-    this->command(0x04);
-    this->wait_until_idle_();
-
     this->command(0x91);
     
     this->command(0x90); // partial window
@@ -4881,7 +4878,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     delay(2); //TODO: Remove
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i]);
-      this->old_buffer_[i] = this->buffer_[i];
+      // this->old_buffer_[i] = this->buffer_[i];
     }
 
     this->command(0x13);  // Send red data Transmission
