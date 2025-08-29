@@ -4690,7 +4690,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->reset_();
 
   this->command(0x00);
-  this->data(0x1F);
+  this->data(0x3F);
 
   this->command(0x04);
   delay(100);  // NOLINT
