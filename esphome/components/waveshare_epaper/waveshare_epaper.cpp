@@ -4703,10 +4703,10 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->command(0xE5);
   this->data(0x6E);
 
-  // VCOM and Data interval Setting
-  this->command(0x50);
-  this->data(0x10); // 0xA9
-  this->data(0x07);
+  // // VCOM and Data interval Setting
+  // this->command(0x50);
+  // this->data(0x10); // 0xA9
+  // this->data(0x07);
 
   // this->reset_();
 
@@ -4724,10 +4724,10 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->command(0xE5);
   // this->data(0x6E);
 
-  // // // VCOM and Data interval Setting
-  // // this->command(0x50);
-  // // this->data(0xA9); // 0xA9
-  // // this->data(0x07);
+  // VCOM and Data interval Setting
+  this->command(0x50);
+  this->data(0xA9); // 0xA9
+  this->data(0x07);
 
   // // --
 
