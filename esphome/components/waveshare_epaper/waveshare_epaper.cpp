@@ -4919,7 +4919,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         this->old_buffer_[i] = this->buffer_[i];
       }
       
-      // this->command(0x11);
+      this->command(0x11);
       
       // this->turn_on_display_();
       // delay(100);  // NOLINT
