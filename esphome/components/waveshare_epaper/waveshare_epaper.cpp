@@ -4690,7 +4690,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   this->reset_();
 
   this->command(0x00);
-  this->data(0x3F);
+  this->data(0x1F);
 
   this->command(0x04);
   delay(100);  // NOLINT
@@ -4738,9 +4738,9 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->data(0x01);  // gate 480
   // this->data(0xE0);
 
-  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
-  // this->command(0x15);
-  // this->data(0x00);
+  // COMMAND DUAL SPI MM_EN, DUSPI_EN
+  this->command(0x15);
+  this->data(0x00);
 
   // // // COMMAND VCOM AND DATA INTERVAL SETTING
   // // this->command(0x50);
@@ -4752,9 +4752,9 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
   // this->data(0x11); // 0x10 0x11
   // this->data(0x07); // 0x07
 
-  // // COMMAND TCON SETTING
-  // this->command(0x60);
-  // this->data(0x22);
+  // COMMAND TCON SETTING
+  this->command(0x60);
+  this->data(0x22);
 
   // // --
 
