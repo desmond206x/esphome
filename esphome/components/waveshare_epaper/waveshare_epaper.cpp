@@ -4925,9 +4925,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->data(0x00);
 
       
-      // this->turn_on_display_();
-      // delay(100);  // NOLINT
-      // this->wait_until_idle_();
+      this->turn_on_display_();
+      delay(100);  // NOLINT
+      this->wait_until_idle_();
 
       this->command(0x92);
 
