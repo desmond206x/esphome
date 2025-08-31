@@ -4972,7 +4972,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         // this->data(0xFF);
         // this->data(old_buffer_[i] ^ this->buffer_[i]);
         // this->old_buffer_[i] = this->buffer_[i];
-        this->data(this->buffer_[i]);
+        this->data(~this->buffer_[i]);
       }
       
       // this->command(0x15);
