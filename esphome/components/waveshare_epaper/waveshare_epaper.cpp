@@ -4954,15 +4954,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->data(0x01);
 
-      // this->command(0x10);
-      // for (uint32_t i = 0; i < buf_len; i++) {
-      //   this->data(this->old_buffer_[i]);
-      // }
-
       this->command(0x10);
       for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(0xFF);
+        this->data(this->old_buffer_[i]);
       }
+
+      // this->command(0x10);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(0xFF);
+      // }
 
       // this->command(0x11);
 
