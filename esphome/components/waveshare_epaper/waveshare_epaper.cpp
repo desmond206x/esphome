@@ -4892,7 +4892,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->turn_on_display_();
     delay(100);  // NOLINT
     this->wait_until_idle_();
-    // this->deep_sleep();
+    this->deep_sleep();
   }
   else {
     // this->command(0x50);
@@ -4972,16 +4972,16 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         // this->data(0xFF);
         this->data(old_buffer_[i] ^ this->buffer_[i]);
         // this->old_buffer_[i] = this->buffer_[i];
-        this->data(this->buffer_[i]);
+        // this->data(this->buffer_[i]);
       }
       
       // this->command(0x15);
       // this->data(0x00);
 
       
-      // this->turn_on_display_();
-      // delay(200);  // NOLINT
-      // this->wait_until_idle_();
+      this->turn_on_display_();
+      delay(200);  // NOLINT
+      this->wait_until_idle_();
 
       this->command(0x92);
       delay(1);
