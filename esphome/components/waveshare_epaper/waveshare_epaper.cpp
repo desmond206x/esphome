@@ -4878,7 +4878,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     delay(2); //TODO: Remove
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(~this->buffer_[i]);
-      this->old_buffer_[i] = this->buffer_[i];
+      // this->old_buffer_[i] = this->buffer_[i];
     }
 
     this->command(0x13);  // Send red data Transmission
@@ -4954,10 +4954,10 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->data(0x01);
 
-      this->command(0x10);
-      for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(this->old_buffer_[i]);
-      }
+      // this->command(0x10);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(this->old_buffer_[i]);
+      // }
 
       // this->command(0x10);
       // for (uint32_t i = 0; i < buf_len; i++) {
@@ -4970,9 +4970,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x13);
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
-        this->data(old_buffer_[i] ^ this->buffer_[i]);
+        // this->data(old_buffer_[i] ^ this->buffer_[i]);
         // this->old_buffer_[i] = this->buffer_[i];
-        // this->data(this->buffer_[i]);
+        this->data(this->buffer_[i]);
       }
       
       // this->command(0x15);
