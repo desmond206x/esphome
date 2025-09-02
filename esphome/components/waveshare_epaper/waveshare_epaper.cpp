@@ -4717,7 +4717,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
 }
 
 void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
-  // this->reset_();
+  this->reset_();
 
   this->command(0x00);
   this->data(0x1F);
@@ -4979,11 +4979,12 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->data(0x00);
 
       
-      this->turn_on_display_();
-      delay(200);  // NOLINT
-      this->wait_until_idle_();
+      // this->turn_on_display_();
+      // delay(200);  // NOLINT
+      // this->wait_until_idle_();
 
       this->command(0x92);
+      delay(1);
 
       // this->wait_until_idle_();
     // }
