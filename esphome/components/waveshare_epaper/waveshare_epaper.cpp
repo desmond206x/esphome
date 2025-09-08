@@ -4303,6 +4303,12 @@ void HOT WaveshareEPaper7P5InV2P::display() {
 
     this->data(0x01);
 
+    this->command(0x10);
+    delay(2);
+    for (uint32_t i= 0; i < buf_len; i++) {
+      this->data(0xFF);
+    }
+
     this->command(0x13);
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
@@ -4313,6 +4319,8 @@ void HOT WaveshareEPaper7P5InV2P::display() {
     this->wait_until_idle_();
 
     this->turn_on_display_();
+
+    this->command(0x92);
   }
 
   ESP_LOGV(TAG, "Before command(0x02) (>> power off)");
