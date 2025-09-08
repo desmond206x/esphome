@@ -4306,7 +4306,7 @@ void HOT WaveshareEPaper7P5InV2P::display() {
     this->command(0x10);
     delay(2);
     for (uint32_t i= 0; i < buf_len; i++) {
-      this->data(0xFF);
+      this->data(0x00);
     }
 
     this->command(0x13);
