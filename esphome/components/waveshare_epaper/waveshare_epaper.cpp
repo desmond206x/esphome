@@ -4889,13 +4889,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->old_buffer_[i] = this->buffer_[i];
     }
 
+    this->command(0x92);
+
     this->command(0x13);  // Send red data Transmission
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i + buf_len]);
     }
 
-    this->command(0x92);
+    // this->command(0x92);
 
     this->turn_on_display_();
     delay(100);  // NOLINT
@@ -4998,10 +5000,12 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->end_data_();
       ESP_LOGI(TAG, "data ended");
+      
+      this->command(0x92);
+      ESP_LOGI(TAG, "0x92 send");
 
       // this->command(0x15);
       // this->data(0x00);
-
       
       this->turn_on_display_();
       ESP_LOGI(TAG, "turned off");
@@ -5009,10 +5013,6 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       delay(200);  // NOLINT
       this->wait_until_idle_();
       ESP_LOGI(TAG, "idle after turn off");
-
-
-      this->command(0x92);
-      ESP_LOGI(TAG, "0x92 send");
 
       delay(1);
 
