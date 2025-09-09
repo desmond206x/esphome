@@ -4946,21 +4946,25 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       // Activate partial refresh and set window bounds
       this->command(0x91);
+      ESP_LOGI(TAG, "0x91 send");
+
       this->command(0x90);
+      ESP_LOGI(TAG, "0x90 send");
 
       // Horizontal start/end channel bank (HRST/HRED)
       this->data(0);
       this->data(0);
       this->data((get_width_internal() ) / 256);
       this->data((get_width_internal() ) % 256 - 1);
-
+            
       // Vertical start/end line (VRST/VRED)
       this->data(0);
       this->data(0);
       this->data((get_height_internal() ) / 256);
       this->data((get_height_internal() ) % 256 -1);
-
+      
       this->data(0x01);
+      ESP_LOGI(TAG, "0x90 data send");
 
       // this->command(0x10);
       // delay(2);
@@ -4977,8 +4981,12 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->command(0x11);
 
       this->command(0x13);
+      ESP_LOGI(TAG, "0x13 data send");
+
       // delay(2);
       this->start_data_();
+      ESP_LOGI(TAG, "data started");
+
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
         // this->data(old_buffer_[i] ^ this->buffer_[i]);
@@ -4986,17 +4994,26 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         this->write_array(this->buffer_, buf_len);
         // this->data(~this->buffer_[i]);
       }
+      ESP_LOGI(TAG, "0x13 data send");
+
       this->end_data_();
+      ESP_LOGI(TAG, "data ended");
 
       // this->command(0x15);
       // this->data(0x00);
 
       
       this->turn_on_display_();
+      ESP_LOGI(TAG, "turned off");
+
       delay(200);  // NOLINT
       this->wait_until_idle_();
+      ESP_LOGI(TAG, "idle after turn off");
+
 
       this->command(0x92);
+      ESP_LOGI(TAG, "0x92 send");
+
       delay(1);
 
       this->wait_until_idle_();
@@ -5004,8 +5021,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
   }
 
   ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
-  // this->command(0x02);
-  // this->wait_until_idle_();
+  this->command(0x02);
+  this->wait_until_idle_();
   ESP_LOGI(TAG, "After command(0x02) (>> power off)");
 
   this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
