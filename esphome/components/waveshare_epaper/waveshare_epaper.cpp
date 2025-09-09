@@ -5002,7 +5002,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         // this->data(0xFF);
         // this->data(old_buffer_[i] ^ this->buffer_[i]);
         // this->old_buffer_[i] = this->buffer_[i];
-        this->write_array(~this->buffer_, buf_len);
+        this->write_array(this->buffer_, buf_len);
         // this->data(~this->buffer_[i]);
       }
       ESP_LOGI(TAG, "0x13 data send");
