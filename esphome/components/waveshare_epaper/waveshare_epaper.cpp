@@ -4978,12 +4978,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "0x10 send");
       delay(2);
       this->start_data_();
+      delay(2);
       ESP_LOGI(TAG, "0x10 data started");
       for (uint32_t i = 0; i < buf_len; i++) {
         this->data(0xFF);
       }
+      delay(2);
       ESP_LOGI(TAG, "0x13 data send");
       this->end_data_();
+      delay(2);
       ESP_LOGI(TAG, "0x10 data ended");
 
       this->command(0x92);
@@ -4996,6 +4999,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       delay(2);
       this->start_data_();
+      delay(2);
       ESP_LOGI(TAG, "0x13 data started");
 
       for (uint32_t i = 0; i < buf_len; i++) {
@@ -5008,6 +5012,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "0x13 data send");
 
       this->end_data_();
+      delay(2);
       ESP_LOGI(TAG, "0x13 data ended");
       
       // this->command(0x92);
