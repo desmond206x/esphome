@@ -4977,7 +4977,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->command(0x11);
 
       this->command(0x13);
-      delay(2);
+      // delay(2);
       this->start_data_();
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
