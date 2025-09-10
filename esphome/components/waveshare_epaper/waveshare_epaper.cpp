@@ -4561,16 +4561,16 @@ static const uint8_t PART_UPDATE_LUT_TTGO_DKE[LUT_SIZE_TTGO_DKE_PART] = {
 void WaveshareEPaper7P5InBV3PBWR::initialize() { 
   this->init_display_(); 
 
-  // old buffer for partial update
-  RAMAllocator<uint8_t> allocator;
-  this->old_buffer_ = allocator.allocate(this->get_buffer_length_() / 2);
-  if (this->old_buffer_ == nullptr) {
-    ESP_LOGE(TAG, "Could not allocate old buffer for display!");
-    return;
-  }
-  for (size_t i = 0; i < this->get_buffer_length_() / 2; i++) {
-    this->old_buffer_[i] = 0xFF;
-  }
+  // // old buffer for partial update
+  // RAMAllocator<uint8_t> allocator;
+  // this->old_buffer_ = allocator.allocate(this->get_buffer_length_() / 2);
+  // if (this->old_buffer_ == nullptr) {
+  //   ESP_LOGE(TAG, "Could not allocate old buffer for display!");
+  //   return;
+  // }
+  // for (size_t i = 0; i < this->get_buffer_length_() / 2; i++) {
+  //   this->old_buffer_[i] = 0xFF;
+  // }
 }
 bool WaveshareEPaper7P5InBV3PBWR::wait_until_idle_() {
   if (this->busy_pin_ == nullptr) {
