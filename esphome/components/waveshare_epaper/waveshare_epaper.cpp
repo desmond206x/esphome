@@ -4997,6 +4997,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
       this->command(0x13);
       ESP_LOGI(TAG, "0x13 send");
+      delay(200);  // NOLINT
+      this->wait_until_idle_();
 
       delay(2);
       // this->start_data_();
