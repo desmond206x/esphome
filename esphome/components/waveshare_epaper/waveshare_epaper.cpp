@@ -4886,7 +4886,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(~this->buffer_[i]);
-      this->old_buffer_[i] = this->buffer_[i];
+      this->old_buffer_[i] = ~this->buffer_[i];
     }
 
     this->command(0x92);
@@ -5005,8 +5005,8 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->write_array(this->buffer_, buf_len);
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
-        this->data(this->old_buffer_[i] ^ this->buffer_[i]);
-        this->old_buffer_[i] = this->buffer_[i];
+        this->data(this->old_buffer_[i] ^ ~this->buffer_[i]);
+        this->old_buffer_[i] = ~this->buffer_[i];
         // this->data(this->buffer_[i]);
       }
       ESP_LOGI(TAG, "0x13 data send");
