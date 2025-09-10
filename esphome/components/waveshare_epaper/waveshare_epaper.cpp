@@ -4978,17 +4978,11 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "0x10 send");
       delay(200);  // NOLINT
       this->wait_until_idle_();
-      // this->start_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x10 data started");
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(this->old_buffer_[i]);
-        this->data(0x00);
+        this->data(0xFF);
       }
       ESP_LOGI(TAG, "0x10 data send");
-      // this->end_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x10 data ended");
 
       delay(200);  // NOLINT
       this->wait_until_idle_();
@@ -4998,10 +4992,6 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "0x13 send");
       delay(200);  // NOLINT
       this->wait_until_idle_();
-
-      // this->start_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x13 data started");
       
       // this->write_array(this->buffer_, buf_len);
       for (uint32_t i = 0; i < buf_len; i++) {
@@ -5012,12 +5002,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       }
       ESP_LOGI(TAG, "0x13 data send");
       delay(200);  // NOLINT
-      this->wait_until_idle_();
-
-      // this->end_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x13 data ended");
-      
+      this->wait_until_idle_();      
       
       // this->command(0x15);
       // this->data(0x00);
