@@ -4980,7 +4980,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->wait_until_idle_();
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(this->old_buffer_[i]);
-        this->data(0xFF);
+        this->data(0x00);
       }
       ESP_LOGI(TAG, "0x10 data send");
 
