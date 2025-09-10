@@ -4985,14 +4985,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         this->data(0xFF);
       }
       delay(2);
-      ESP_LOGI(TAG, "0x13 data send");
+      ESP_LOGI(TAG, "0x10 data send");
       // this->end_data_();
       // delay(2);
       // ESP_LOGI(TAG, "0x10 data ended");
 
       this->command(0x92);
       ESP_LOGI(TAG, "0x92 send");
-
+      delay(200);  // NOLINT
+      this->wait_until_idle_();
       // this->command(0x11);
 
       this->command(0x13);
