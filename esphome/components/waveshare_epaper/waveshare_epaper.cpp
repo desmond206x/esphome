@@ -4562,15 +4562,15 @@ void WaveshareEPaper7P5InBV3PBWR::initialize() {
   this->init_display_(); 
 
   // old buffer for partial update
-  // RAMAllocator<uint8_t> allocator;
-  // this->old_buffer_ = allocator.allocate(this->get_buffer_length_() / 2);
-  // if (this->old_buffer_ == nullptr) {
-  //   ESP_LOGE(TAG, "Could not allocate old buffer for display!");
-  //   return;
-  // }
-  // for (size_t i = 0; i < this->get_buffer_length_() / 2; i++) {
-  //   this->old_buffer_[i] = 0xFF;
-  // }
+  RAMAllocator<uint8_t> allocator;
+  this->old_buffer_ = allocator.allocate(this->get_buffer_length_() / 2);
+  if (this->old_buffer_ == nullptr) {
+    ESP_LOGE(TAG, "Could not allocate old buffer for display!");
+    return;
+  }
+  for (size_t i = 0; i < this->get_buffer_length_() / 2; i++) {
+    this->old_buffer_[i] = 0xFF;
+  }
 }
 bool WaveshareEPaper7P5InBV3PBWR::wait_until_idle_() {
   if (this->busy_pin_ == nullptr) {
@@ -4886,7 +4886,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(~this->buffer_[i]);
-      // this->old_buffer_[i] = this->buffer_[i];
+      this->old_buffer_[i] = this->buffer_[i];
     }
 
     this->command(0x92);
@@ -4982,16 +4982,13 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // delay(2);
       // ESP_LOGI(TAG, "0x10 data started");
       for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(0x00);
+        this->data(this->old_buffer_[i]);
       }
-      delay(2);
       ESP_LOGI(TAG, "0x10 data send");
       // this->end_data_();
       // delay(2);
       // ESP_LOGI(TAG, "0x10 data ended");
 
-      // this->command(0x92);
-      // ESP_LOGI(TAG, "0x92 send");
       delay(200);  // NOLINT
       this->wait_until_idle_();
       // this->command(0x11);
@@ -5008,9 +5005,9 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // this->write_array(this->buffer_, buf_len);
       for (uint32_t i = 0; i < buf_len; i++) {
         // this->data(0xFF);
-        // this->data(old_buffer_[i] ^ this->buffer_[i]);
-        // this->old_buffer_[i] = this->buffer_[i];
-        this->data(this->buffer_[i]);
+        this->data(this->old_buffer_[i] ^ this->buffer_[i]);
+        this->old_buffer_[i] = this->buffer_[i];
+        // this->data(this->buffer_[i]);
       }
       ESP_LOGI(TAG, "0x13 data send");
       delay(200);  // NOLINT
@@ -5053,7 +5050,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 
 void WaveshareEPaper7P5InBV3PBWR::turn_on_display_() {
   this->command(0x12);
-  delay(100);  // NOLINT
+  delay(200);  // NOLINT
   this->wait_until_idle_();
 }
 
