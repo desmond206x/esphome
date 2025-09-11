@@ -5030,7 +5030,16 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->wait_until_idle_();
       ESP_LOGI(TAG, "idle after turn on");
     }
+
+    ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
+    this->command(0x02);
+    this->wait_until_idle_();
+    ESP_LOGI(TAG, "After command(0x02) (>> power off)");
+
+    this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
+    ESP_LOGI(TAG, "At Update is at: %u", this->at_update_);
 }
+
 // void HOT WaveshareEPaper7P5InBV3PBWR::display() {
 //   // ESP_LOGI(TAG, "buffer: " + this->buffer_);
 //   const uint32_t buf_len = this->get_buffer_length_() / 2u;
