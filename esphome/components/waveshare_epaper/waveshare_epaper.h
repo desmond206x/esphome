@@ -1027,6 +1027,8 @@ class WaveshareEPaper7P5InBV3PBWR : public WaveshareEPaperBWR {
   uint32_t full_update_every_{30};
   uint32_t at_update_{0};
 
+  int init_start_{1};
+
  private:
   void reset_() {
     if (this->reset_pin_ != nullptr) {
