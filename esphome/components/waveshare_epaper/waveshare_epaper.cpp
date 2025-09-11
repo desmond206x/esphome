@@ -4561,7 +4561,7 @@ static const uint8_t PART_UPDATE_LUT_TTGO_DKE[LUT_SIZE_TTGO_DKE_PART] = {
 void WaveshareEPaper7P5InBV3PBWR::initialize() { 
   this->init_display_(); 
 
-  int init_start = 1
+  this->init_start = 1;
 
   // // old buffer for partial update
   // RAMAllocator<uint8_t> allocator;
