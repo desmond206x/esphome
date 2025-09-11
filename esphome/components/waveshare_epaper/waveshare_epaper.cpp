@@ -4931,14 +4931,18 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->init_display_();
 
     this->command(0x10);  // Send BW data Transmission
-    for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(~this->buffer_[i]);
-    }
+    this->write_array(~this->buffer_, buf_len); todo: buffer splitten oder nur den richtigen teil senden
+
+    // for (uint32_t i = 0; i < buf_len; i++) {
+    //   this->data(~this->buffer_[i]);
+    // }
 
     this->command(0x13);  // Send red data Transmission
-    for (uint32_t i = 0; i < buf_len; i++) {
-      this->data(this->buffer_[i + buf_len]);
-    }
+    this->write_array(this->buffer_, buf_len);
+
+    // for (uint32_t i = 0; i < buf_len; i++) {
+    //   this->data(this->buffer_[i + buf_len]);
+    // }
 
     this->turn_on_display_();
     delay(100);  // NOLINT
@@ -5017,10 +5021,10 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x13);
       ESP_LOGI(TAG, "0x13 send");
 
-      // this->write_array(this->buffer_, buf_len);
-      for (uint32_t i = 0; i < buf_len; i++) {
-        this->data(~this->buffer_[i]);
-      }
+      this->write_array(this->buffer_, buf_len);
+      // for (uint32_t i = 0; i < buf_len; i++) {
+      //   this->data(~this->buffer_[i]);
+      // }
       ESP_LOGI(TAG, "0x13 data send");
       
       ESP_LOGI(TAG, "turn on now");
