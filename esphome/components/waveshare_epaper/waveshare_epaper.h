@@ -1046,9 +1046,6 @@ class WaveshareEPaper7P5InBV3PBWR : public WaveshareEPaperBWR {
   void init_display_fast_();
 
   void init_display_partial_();
-
-  extern int init_start;
-  // uint8_t *old_buffer_{nullptr};
 };
 
 
