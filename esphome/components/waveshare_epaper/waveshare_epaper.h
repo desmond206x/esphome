@@ -1010,6 +1010,7 @@ class WaveshareEPaper7P5InBV3PBWR : public WaveshareEPaperBWR {
     // COMMAND DEEP SLEEP
     this->command(0x07);
     this->data(0xA5);  // check byte
+    delay(2000);  // NOLINT
   }
 
   void set_full_update_every(uint32_t full_update_every);
@@ -1032,7 +1033,7 @@ class WaveshareEPaper7P5InBV3PBWR : public WaveshareEPaperBWR {
       this->reset_pin_->digital_write(true);
       delay(200);  // NOLINT
       this->reset_pin_->digital_write(false);
-      delay(5);
+      delay(4);
       this->reset_pin_->digital_write(true);
       delay(200);  // NOLINT
     }
@@ -1046,7 +1047,8 @@ class WaveshareEPaper7P5InBV3PBWR : public WaveshareEPaperBWR {
 
   void init_display_partial_();
 
-  uint8_t *old_buffer_{nullptr};
+  extern int init_start;
+  // uint8_t *old_buffer_{nullptr};
 };
 
 

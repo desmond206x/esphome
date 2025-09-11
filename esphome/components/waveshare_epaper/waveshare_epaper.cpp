@@ -4561,6 +4561,8 @@ static const uint8_t PART_UPDATE_LUT_TTGO_DKE[LUT_SIZE_TTGO_DKE_PART] = {
 void WaveshareEPaper7P5InBV3PBWR::initialize() { 
   this->init_display_(); 
 
+  int init_start = 1
+
   // // old buffer for partial update
   // RAMAllocator<uint8_t> allocator;
   // this->old_buffer_ = allocator.allocate(this->get_buffer_length_() / 2);
@@ -4578,6 +4580,7 @@ bool WaveshareEPaper7P5InBV3PBWR::wait_until_idle_() {
   }
 
   const uint32_t start = millis();
+  this->command(0x71); // evtl. wieder raus?
   while (this->busy_pin_->digital_read()) {
     this->command(0x71);
     if (millis() - start > this->idle_timeout_()) {
@@ -4596,17 +4599,27 @@ void WaveshareEPaper7P5InBV3PBWR::set_full_update_every(uint32_t full_update_eve
 void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->reset_();
 
-  // COMMAND POWER SETTING
   this->command(0x01);
   this->data(0x07);
   this->data(0x07);
   this->data(0x3F);
   this->data(0x3F);
 
+  this->command(0x06);
+  this->data(0x17);
+  this->data(0x17);
+  this->data(0x28);
+  this->data(0x17);
+
+  // POWER ON
+  this->command(0x04);
+  delay(100);  // NOLINT
+  this->wait_until_idle_();
+
   // COMMAND PANEL SETTING
   this->command(0x00);
   this->data(0x0F);
-  
+
   // COMMAND RESOLUTION SETTING
   this->command(0x61);
   this->data(0x03);  // source 800
@@ -4618,7 +4631,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   this->command(0x15);
   this->data(0x00);
 
-// COMMAND VCOM AND DATA INTERVAL SETTING
+  // COMMAND VCOM AND DATA INTERVAL SETTING
   this->command(0x50);
   this->data(0x11);
   this->data(0x07);
@@ -4626,78 +4639,113 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_() {
   // COMMAND TCON SETTING
   this->command(0x60);
   this->data(0x22);
+}
 
-  // // COMMAND POWER SETTING
-  // this->command(0x01);
-  // this->data(0x07);
-  // this->data(0x07); // 17
-  // this->data(0x3F);
-  // this->data(0x26); // 3F
-  // this->data(0x11); // del
+// void WaveshareEPaper7P5InBV3PBWR::init_display_() {
+//   this->reset_();
 
-  // // // 1-0=11: internal power
-  // // this->data(0x07);  // VRS_EN=1, VS_EN=1, VG_EN=1
-  // // this->data(0x17);  // VGH&VGL ??? VCOM_SLEW=1 but this is fixed, VG_LVL[2:0]=111 => VGH=20V VGL=-20V, it could be 0x07
-  // // this->data(0x3F);  // VSH=15V?
-  // // this->data(0x26);  // VSL=-9.4V?
-  // // this->data(0x11);  // VSHR=5.8V?
+//   // COMMAND POWER SETTING
+//   this->command(0x01);
+//   this->data(0x07);
+//   this->data(0x07);
+//   this->data(0x3F);
+//   this->data(0x3F);
 
-  // // COMMAND BOOSTER SOFT START
-  // this->command(0x06);
-  // this->data(0x17);
-  // this->data(0x17);
-  // this->data(0x28);
-  // this->data(0x17);
+//   // COMMAND PANEL SETTING
+//   this->command(0x00);
+//   this->data(0x0F);
+  
+//   // COMMAND RESOLUTION SETTING
+//   this->command(0x61);
+//   this->data(0x03);  // source 800
+//   this->data(0x20);
+//   this->data(0x01);  // gate 480
+//   this->data(0xE0);
 
-  // // VCOM DC Setting
-  // this->command(0x82);
-  // this->data(0x24);  // VCOM=-1.9V
+//   // COMMAND DUAL SPI MM_EN, DUSPI_EN
+//   this->command(0x15);
+//   this->data(0x00);
 
-  // // POWER ON
-  // this->command(0x04);
-  // delay(100);  // NOLINT
-  // this->wait_until_idle_();
+// // COMMAND VCOM AND DATA INTERVAL SETTING
+//   this->command(0x50);
+//   this->data(0x11);
+//   this->data(0x07);
 
-  // // COMMAND PANEL SETTING
-  // this->command(0x00);
-  // this->data(0x0F);
+//   // COMMAND TCON SETTING
+//   this->command(0x60);
+//   this->data(0x22);
 
-  // // COMMAND RESOLUTION SETTING
-  // this->command(0x61);
-  // this->data(0x03);  // source 800
-  // this->data(0x20);
-  // this->data(0x01);  // gate 480
-  // this->data(0xE0);
+//   // // COMMAND POWER SETTING
+//   // this->command(0x01);
+//   // this->data(0x07);
+//   // this->data(0x07); // 17
+//   // this->data(0x3F);
+//   // this->data(0x26); // 3F
+//   // this->data(0x11); // del
 
-  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
-  // this->command(0x15);
-  // this->data(0x00);
+//   // // // 1-0=11: internal power
+//   // // this->data(0x07);  // VRS_EN=1, VS_EN=1, VG_EN=1
+//   // // this->data(0x17);  // VGH&VGL ??? VCOM_SLEW=1 but this is fixed, VG_LVL[2:0]=111 => VGH=20V VGL=-20V, it could be 0x07
+//   // // this->data(0x3F);  // VSH=15V?
+//   // // this->data(0x26);  // VSL=-9.4V?
+//   // // this->data(0x11);  // VSHR=5.8V?
 
-  // // COMMAND VCOM AND DATA INTERVAL SETTING
-  // this->command(0x50);
-  // this->data(0x20); // 0x10 0x11
-  // this->data(0x00); // 0x07
+//   // // COMMAND BOOSTER SOFT START
+//   // this->command(0x06);
+//   // this->data(0x17);
+//   // this->data(0x17);
+//   // this->data(0x28);
+//   // this->data(0x17);
 
-  // // COMMAND TCON SETTING
-  // this->command(0x60);
-  // this->data(0x22);
+//   // // VCOM DC Setting
+//   // this->command(0x82);
+//   // this->data(0x24);  // VCOM=-1.9V
 
-  // // // Resolution setting
-  // // this->command(0x65);
-  // // this->data(0x00);
-  // // this->data(0x00);  // 800*480
-  // // this->data(0x00);
-  // // this->data(0x00);
+//   // // POWER ON
+//   // this->command(0x04);
+//   // delay(100);  // NOLINT
+//   // this->wait_until_idle_();
 
-  // // // COMMAND ENABLE FAST UPDATE
-  // // this->command(0xE0);
-  // // this->data(0x02);
-  // // this->command(0xE5);
-  // // this->data(0x5A);
+//   // // COMMAND PANEL SETTING
+//   // this->command(0x00);
+//   // this->data(0x0F);
 
-  // // // COMMAND POWER DRIVER HAT DOWN
-  // // this->command(0x02);
-};
+//   // // COMMAND RESOLUTION SETTING
+//   // this->command(0x61);
+//   // this->data(0x03);  // source 800
+//   // this->data(0x20);
+//   // this->data(0x01);  // gate 480
+//   // this->data(0xE0);
+
+//   // // COMMAND DUAL SPI MM_EN, DUSPI_EN
+//   // this->command(0x15);
+//   // this->data(0x00);
+
+//   // // COMMAND VCOM AND DATA INTERVAL SETTING
+//   // this->command(0x50);
+//   // this->data(0x20); // 0x10 0x11
+//   // this->data(0x00); // 0x07
+
+//   // // COMMAND TCON SETTING
+//   // this->command(0x60);
+//   // this->data(0x22);
+
+//   // // // Resolution setting
+//   // // this->command(0x65);
+//   // // this->data(0x00);
+//   // // this->data(0x00);  // 800*480
+//   // // this->data(0x00);
+//   // // this->data(0x00);
+
+//   // // // COMMAND ENABLE FAST UPDATE
+//   // // this->command(0xE0);
+//   // // this->data(0x02);
+//   // // this->command(0xE5);
+//   // // this->data(0x5A);
+
+//   // // // COMMAND POWER DRIVER HAT DOWN
+//   // // this->command(0x02);
+// };
 
 void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
   this->reset_();
@@ -4719,6 +4767,7 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_fast_() {
   this->data(0x02);
   this->command(0xE5);
   this->data(0x5A);
+
   this->command(0x50);
   this->data(0x11);
   this->data(0x07);
@@ -4736,121 +4785,140 @@ void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
 
   this->command(0xE0);
   this->data(0x02);
+  this->command(0xE5);
+  this->data(0x6E);
 
-  // // Force Temperature
-  // this->command(0xE5);
-  // this->data(0x6E);
-
-  // // VCOM and Data interval Setting
-  // this->command(0x50);
-  // this->data(0x10); // 0xA9
-  // this->data(0x07);
-
-  // this->reset_();
-
-  // this->command(0x00);
-  // this->data(0x1F);
-
-  // this->command(0x04);
-  // delay(100);  // NOLINT
-  // this->wait_until_idle_();
-
-  // // this->command(0xE0);
-  // // this->data(0x02);
-
-  // // Force Temperature
-  // this->command(0xE5);
-  // this->data(0x6E);
-
-  // VCOM and Data interval Setting
   this->command(0x50);
-  this->data(0xA9); // 0xA9
+  this->data(0xA9);
   this->data(0x07);
-
-  // // --
-
-  // // COMMAND RESOLUTION SETTING
-  // this->command(0x61);
-  // this->data(0x03);  // source 800
-  // this->data(0x20);
-  // this->data(0x01);  // gate 480
-  // this->data(0xE0);
-
-  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
-  // this->command(0x15);
-  // this->data(0x00);
-
-  // // // COMMAND VCOM AND DATA INTERVAL SETTING
-  // // this->command(0x50);
-  // // this->data(0x20); // 0x10 0x11
-  // // this->data(0x00); // 0x07
-
-  // // COMMAND VCOM AND DATA INTERVAL SETTING
-  // this->command(0x50);
-  // this->data(0x11); // 0x10 0x11
-  // this->data(0x07); // 0x07
-
-  // // COMMAND TCON SETTING
-  // this->command(0x60);
-  // this->data(0x22);
-
-  // // --
-
-  // // COMMAND POWER SETTING
-  // this->command(0x01);
-  // this->data(0x07);
-  // this->data(0x07);
-  // this->data(0x3f);
-  // this->data(0x3f);
-
-  // // COMMAND BOOSTER SOFT START
-  // this->command(0x06);
-  // this->data(0x17);
-  // this->data(0x17);
-  // this->data(0x28);
-  // this->data(0x17);
-
-  // // COMMAND POWER DRIVER HAT UP
-  // this->command(0x04);
-  // delay(100);  // NOLINT
-  // this->wait_until_idle_();
-
-  // // COMMAND PANEL SETTING
-  // this->command(0x00);
-  // this->data(0x1F);
-
-  // // COMMAND RESOLUTION SETTING
-  // this->command(0x61);
-  // this->data(0x03);
-  // this->data(0x20);
-  // this->data(0x01);
-  // this->data(0xE0);
-
-  // // COMMAND DUAL SPI MM_EN, DUSPI_EN
-  // this->command(0x15);
-  // this->data(0x00);
-
-  // // COMMAND VCOM AND DATA INTERVAL SETTING
-  // this->command(0x50);
-  // this->data(0x10);
-  // this->data(0x07);
-
-  // // COMMAND TCON SETTING
-  // this->command(0x60);
-  // this->data(0x22);
-
-  // // COMMAND ENABLE FAST UPDATE
-  // this->command(0xE0);
-  // this->data(0x02);
-  // this->command(0xE5);
-  // this->data(0x5A);
-
-  // // COMMAND POWER DRIVER HAT DOWN
-  // this->command(0x02);
 }
 
+// void WaveshareEPaper7P5InBV3PBWR::init_display_partial_() {
+//   this->reset_();
+
+//   this->command(0x00);
+//   this->data(0x1F);
+
+//   this->command(0x04);
+//   delay(100);  // NOLINT
+//   this->wait_until_idle_();
+
+//   this->command(0xE0);
+//   this->data(0x02);
+
+//   // // Force Temperature
+//   // this->command(0xE5);
+//   // this->data(0x6E);
+
+//   // // VCOM and Data interval Setting
+//   // this->command(0x50);
+//   // this->data(0x10); // 0xA9
+//   // this->data(0x07);
+
+//   // this->reset_();
+
+//   // this->command(0x00);
+//   // this->data(0x1F);
+
+//   // this->command(0x04);
+//   // delay(100);  // NOLINT
+//   // this->wait_until_idle_();
+
+//   // // this->command(0xE0);
+//   // // this->data(0x02);
+
+//   // // Force Temperature
+//   // this->command(0xE5);
+//   // this->data(0x6E);
+
+//   // VCOM and Data interval Setting
+//   this->command(0x50);
+//   this->data(0xA9); // 0xA9
+//   this->data(0x07);
+
+//   // // --
+
+//   // // COMMAND RESOLUTION SETTING
+//   // this->command(0x61);
+//   // this->data(0x03);  // source 800
+//   // this->data(0x20);
+//   // this->data(0x01);  // gate 480
+//   // this->data(0xE0);
+
+//   // // COMMAND DUAL SPI MM_EN, DUSPI_EN
+//   // this->command(0x15);
+//   // this->data(0x00);
+
+//   // // // COMMAND VCOM AND DATA INTERVAL SETTING
+//   // // this->command(0x50);
+//   // // this->data(0x20); // 0x10 0x11
+//   // // this->data(0x00); // 0x07
+
+//   // // COMMAND VCOM AND DATA INTERVAL SETTING
+//   // this->command(0x50);
+//   // this->data(0x11); // 0x10 0x11
+//   // this->data(0x07); // 0x07
+
+//   // // COMMAND TCON SETTING
+//   // this->command(0x60);
+//   // this->data(0x22);
+
+//   // // --
+
+//   // // COMMAND POWER SETTING
+//   // this->command(0x01);
+//   // this->data(0x07);
+//   // this->data(0x07);
+//   // this->data(0x3f);
+//   // this->data(0x3f);
+
+//   // // COMMAND BOOSTER SOFT START
+//   // this->command(0x06);
+//   // this->data(0x17);
+//   // this->data(0x17);
+//   // this->data(0x28);
+//   // this->data(0x17);
+
+//   // // COMMAND POWER DRIVER HAT UP
+//   // this->command(0x04);
+//   // delay(100);  // NOLINT
+//   // this->wait_until_idle_();
+
+//   // // COMMAND PANEL SETTING
+//   // this->command(0x00);
+//   // this->data(0x1F);
+
+//   // // COMMAND RESOLUTION SETTING
+//   // this->command(0x61);
+//   // this->data(0x03);
+//   // this->data(0x20);
+//   // this->data(0x01);
+//   // this->data(0xE0);
+
+//   // // COMMAND DUAL SPI MM_EN, DUSPI_EN
+//   // this->command(0x15);
+//   // this->data(0x00);
+
+//   // // COMMAND VCOM AND DATA INTERVAL SETTING
+//   // this->command(0x50);
+//   // this->data(0x10);
+//   // this->data(0x07);
+
+//   // // COMMAND TCON SETTING
+//   // this->command(0x60);
+//   // this->data(0x22);
+
+//   // // COMMAND ENABLE FAST UPDATE
+//   // this->command(0xE0);
+//   // this->data(0x02);
+//   // this->command(0xE5);
+//   // this->data(0x5A);
+
+//   // // COMMAND POWER DRIVER HAT DOWN
+//   // this->command(0x02);
+// }
+
 void HOT WaveshareEPaper7P5InBV3PBWR::display() {
-  // ESP_LOGI(TAG, "buffer: " + this->buffer_);
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
   ESP_LOGI(TAG, "Power on the display and hat");
   ESP_LOGI(TAG, "buf_len: %u", buf_len);
@@ -4862,47 +4930,19 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     ESP_LOGI(TAG, "Full refresh");
     this->init_display_();
 
-    this->command(0x91);
-    
-    this->command(0x90); // partial window
-    // Horizontal start/end channel bank (HRST/HRED)
-    this->data(0);
-    this->data(0);
-    this->data((get_width_internal() ) / 256);
-    this->data((get_width_internal() ) % 256 - 1);
-
-    // Vertical start/end line (VRST/VRED)
-    this->data(0);
-    this->data(0);
-    this->data((get_height_internal() ) / 256);
-    this->data((get_height_internal() ) % 256 -1);
-    this->data(0);
-
-    this->command(0x04);
-    delay(200);  // NOLINT
-    this->wait_until_idle_();
-
     this->command(0x10);  // Send BW data Transmission
-    delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(~this->buffer_[i]);
-      // this->old_buffer_[i] = ~this->buffer_[i];
     }
 
-    this->command(0x92);
-
     this->command(0x13);  // Send red data Transmission
-    delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i + buf_len]);
     }
 
-    // this->command(0x92);
-
     this->turn_on_display_();
     delay(100);  // NOLINT
     this->wait_until_idle_();
-    this->deep_sleep();
   }
   else {
     // this->command(0x50);
@@ -4942,10 +4982,6 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       ESP_LOGI(TAG, "Partial refresh");
       this->init_display_partial_();
 
-      // Enable partial refresh
-      this->command(0xE5);
-      this->data(0x6E);
-
       // Activate partial refresh and set window bounds
       this->command(0x91);
       ESP_LOGI(TAG, "0x91 send");
@@ -4964,90 +5000,236 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->data(0);
       this->data((get_height_internal() ) / 256);
       this->data((get_height_internal() ) % 256 -1);
-      
       this->data(0x01);
       ESP_LOGI(TAG, "0x90 data send");
 
-      // this->command(0x10);
-      // delay(2);
-      // for (uint32_t i = 0; i < buf_len; i++) {
-      //   this->data(~this->buffer_[i]);
-      // }
-
-      this->command(0x10);
-      ESP_LOGI(TAG, "0x10 send");
-      delay(200);  // NOLINT
-      this->wait_until_idle_();
-      // this->start_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x10 data started");
-      for (uint32_t i = 0; i < buf_len; i++) {
-        // this->data(this->old_buffer_[i]);
-        this->data(0x00);
+      if (this->init_start == 1) {
+        this->init_start = 0;
+        this->command(0x10);
+        ESP_LOGI(TAG, "0x10 send");
+        delay(2);
+        for (uint32_t i = 0; i < buf_len; i++) {
+          this->data(0xFF);
+        }
+        ESP_LOGI(TAG, "0x10 data send");
       }
-      ESP_LOGI(TAG, "0x10 data send");
-      // this->end_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x10 data ended");
-
-      delay(200);  // NOLINT
-      this->wait_until_idle_();
-      // this->command(0x11);
 
       this->command(0x13);
       ESP_LOGI(TAG, "0x13 send");
-      delay(200);  // NOLINT
-      this->wait_until_idle_();
 
-      // this->start_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x13 data started");
-      
       // this->write_array(this->buffer_, buf_len);
       for (uint32_t i = 0; i < buf_len; i++) {
-        // this->data(0xFF);
-        // this->data(this->old_buffer_[i] ^ ~this->buffer_[i]);
-        // this->old_buffer_[i] = ~this->buffer_[i];
         this->data(~this->buffer_[i]);
       }
       ESP_LOGI(TAG, "0x13 data send");
-      delay(200);  // NOLINT
-      this->wait_until_idle_();
-
-      // this->end_data_();
-      // delay(2);
-      // ESP_LOGI(TAG, "0x13 data ended");
-      
-      
-      // this->command(0x15);
-      // this->data(0x00);
       
       ESP_LOGI(TAG, "turn on now");
       this->turn_on_display_();
       ESP_LOGI(TAG, "turned on");
-
-      ESP_LOGI(TAG, "0x92 sending");      
-      this->command(0x92);
-      ESP_LOGI(TAG, "0x92 send");
-
-      delay(200);  // NOLINT
+      delay(100);  // NOLINT
       this->wait_until_idle_();
       ESP_LOGI(TAG, "idle after turn on");
-
-      delay(1);
-
-      this->wait_until_idle_();
-    // }
-  }
-
-  ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
-  this->command(0x02);
-  this->wait_until_idle_();
-  ESP_LOGI(TAG, "After command(0x02) (>> power off)");
-
-  this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
-  ESP_LOGI(TAG, "At Update is at: %u", this->at_update_);
+    }
 }
+// void HOT WaveshareEPaper7P5InBV3PBWR::display() {
+//   // ESP_LOGI(TAG, "buffer: " + this->buffer_);
+//   const uint32_t buf_len = this->get_buffer_length_() / 2u;
+//   ESP_LOGI(TAG, "Power on the display and hat");
+//   ESP_LOGI(TAG, "buf_len: %u", buf_len);
+
+//   ESP_LOGI(TAG, "full update every: %u", this->full_update_every_);
+
+//   // if (this->full_update_every_ == 1) {
+//   if (this->at_update_ == 0) {
+//     ESP_LOGI(TAG, "Full refresh");
+//     this->init_display_();
+
+//     this->command(0x91);
+    
+//     this->command(0x90); // partial window
+//     // Horizontal start/end channel bank (HRST/HRED)
+//     this->data(0);
+//     this->data(0);
+//     this->data((get_width_internal() ) / 256);
+//     this->data((get_width_internal() ) % 256 - 1);
+
+//     // Vertical start/end line (VRST/VRED)
+//     this->data(0);
+//     this->data(0);
+//     this->data((get_height_internal() ) / 256);
+//     this->data((get_height_internal() ) % 256 -1);
+//     this->data(0);
+
+//     this->command(0x04);
+//     delay(200);  // NOLINT
+//     this->wait_until_idle_();
+
+//     this->command(0x10);  // Send BW data Transmission
+//     delay(2);
+//     for (uint32_t i = 0; i < buf_len; i++) {
+//       this->data(~this->buffer_[i]);
+//       // this->old_buffer_[i] = ~this->buffer_[i];
+//     }
+
+//     this->command(0x92);
+
+//     this->command(0x13);  // Send red data Transmission
+//     delay(2);
+//     for (uint32_t i = 0; i < buf_len; i++) {
+//       this->data(this->buffer_[i + buf_len]);
+//     }
+
+//     // this->command(0x92);
+
+//     this->turn_on_display_();
+//     delay(100);  // NOLINT
+//     this->wait_until_idle_();
+//     this->deep_sleep();
+//   }
+//   else {
+//     // this->command(0x50);
+//     // this->data(0xA9);
+//     // this->data(0x07);
+
+//     // if (this->at_update_ == 0) {
+//       // ESP_LOGI(TAG, "Fast refresh");
+
+//       // this->init_display_fast_();
+
+//       // // // Enable fast refresh
+//       // // this->command(0xE5);
+//       // // this->data(0x5A);
+
+//       // // this->command(0x92);
+
+//       // this->command(0x10);
+//       // delay(2);
+//       // for (uint32_t i = 0; i < buf_len; i++) {
+//       //   this->data(this->buffer_[i]);
+//       // }
+
+//       // // delay(100);  // NOLINT
+//       // // this->wait_until_idle_();
+
+//       // this->command(0x13);
+//       // delay(2);
+//       // for (uint32_t i = 0; i < buf_len; i++) {
+//       //   this->data(this->buffer_[i + buf_len]);
+//       // }
+
+//       // this->turn_on_display_();
+//       // delay(100);  // NOLINT
+//       // this->wait_until_idle_();
+//     // } else {
+//       ESP_LOGI(TAG, "Partial refresh");
+//       this->init_display_partial_();
+
+//       // Enable partial refresh
+//       this->command(0xE5);
+//       this->data(0x6E);
+
+//       // Activate partial refresh and set window bounds
+//       this->command(0x91);
+//       ESP_LOGI(TAG, "0x91 send");
+
+//       this->command(0x90);
+//       ESP_LOGI(TAG, "0x90 send");
+
+//       // Horizontal start/end channel bank (HRST/HRED)
+//       this->data(0);
+//       this->data(0);
+//       this->data((get_width_internal() ) / 256);
+//       this->data((get_width_internal() ) % 256 - 1);
+            
+//       // Vertical start/end line (VRST/VRED)
+//       this->data(0);
+//       this->data(0);
+//       this->data((get_height_internal() ) / 256);
+//       this->data((get_height_internal() ) % 256 -1);
+      
+//       this->data(0x01);
+//       ESP_LOGI(TAG, "0x90 data send");
+
+//       // this->command(0x10);
+//       // delay(2);
+//       // for (uint32_t i = 0; i < buf_len; i++) {
+//       //   this->data(~this->buffer_[i]);
+//       // }
+
+//       this->command(0x10);
+//       ESP_LOGI(TAG, "0x10 send");
+//       delay(200);  // NOLINT
+//       this->wait_until_idle_();
+//       // this->start_data_();
+//       // delay(2);
+//       // ESP_LOGI(TAG, "0x10 data started");
+//       for (uint32_t i = 0; i < buf_len; i++) {
+//         // this->data(this->old_buffer_[i]);
+//         this->data(0x00);
+//       }
+//       ESP_LOGI(TAG, "0x10 data send");
+//       // this->end_data_();
+//       // delay(2);
+//       // ESP_LOGI(TAG, "0x10 data ended");
+
+//       delay(200);  // NOLINT
+//       this->wait_until_idle_();
+//       // this->command(0x11);
+
+//       this->command(0x13);
+//       ESP_LOGI(TAG, "0x13 send");
+//       delay(200);  // NOLINT
+//       this->wait_until_idle_();
+
+//       // this->start_data_();
+//       // delay(2);
+//       // ESP_LOGI(TAG, "0x13 data started");
+      
+//       // this->write_array(this->buffer_, buf_len);
+//       for (uint32_t i = 0; i < buf_len; i++) {
+//         // this->data(0xFF);
+//         // this->data(this->old_buffer_[i] ^ ~this->buffer_[i]);
+//         // this->old_buffer_[i] = ~this->buffer_[i];
+//         this->data(~this->buffer_[i]);
+//       }
+//       ESP_LOGI(TAG, "0x13 data send");
+//       delay(200);  // NOLINT
+//       this->wait_until_idle_();
+
+//       // this->end_data_();
+//       // delay(2);
+//       // ESP_LOGI(TAG, "0x13 data ended");
+      
+      
+//       // this->command(0x15);
+//       // this->data(0x00);
+      
+//       ESP_LOGI(TAG, "turn on now");
+//       this->turn_on_display_();
+//       ESP_LOGI(TAG, "turned on");
+
+//       ESP_LOGI(TAG, "0x92 sending");      
+//       this->command(0x92);
+//       ESP_LOGI(TAG, "0x92 send");
+
+//       delay(200);  // NOLINT
+//       this->wait_until_idle_();
+//       ESP_LOGI(TAG, "idle after turn on");
+
+//       delay(1);
+
+//       this->wait_until_idle_();
+//     // }
+//   }
+
+//   ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
+//   this->command(0x02);
+//   this->wait_until_idle_();
+//   ESP_LOGI(TAG, "After command(0x02) (>> power off)");
+
+//   this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
+//   ESP_LOGI(TAG, "At Update is at: %u", this->at_update_);
+// }
 
 void WaveshareEPaper7P5InBV3PBWR::turn_on_display_() {
   this->command(0x12);
