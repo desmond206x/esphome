@@ -4938,7 +4938,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     // }
 
     this->command(0x13);  // Send red data Transmission
-    this->write_array(this->buffer_ + buf_len, buf_len);
+    this->write_array(~(this->buffer_) + buf_len, buf_len);
 
     // for (uint32_t i = 0; i < buf_len; i++) {
     //   this->data(this->buffer_[i + buf_len]);
@@ -5021,7 +5021,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x13);
       ESP_LOGI(TAG, "0x13 send");
 
-      this->write_array(this->buffer_, buf_len);
+      this->write_array(~this->buffer_, buf_len);
       // for (uint32_t i = 0; i < buf_len; i++) {
       //   this->data(~this->buffer_[i]);
       // }
