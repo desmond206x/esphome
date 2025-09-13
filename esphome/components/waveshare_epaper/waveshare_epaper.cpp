@@ -4931,14 +4931,14 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->init_display_();
 
     this->command(0x10);  // Send BW data Transmission
-    this->write_array(~this->buffer_, buf_len); todo: buffer splitten oder nur den richtigen teil senden
+    this->write_array(~this->buffer_, buf_len);
 
     // for (uint32_t i = 0; i < buf_len; i++) {
     //   this->data(~this->buffer_[i]);
     // }
 
     this->command(0x13);  // Send red data Transmission
-    this->write_array(this->buffer_, buf_len);
+    this->write_array(this->buffer_ + buf_len, buf_len);
 
     // for (uint32_t i = 0; i < buf_len; i++) {
     //   this->data(this->buffer_[i + buf_len]);
