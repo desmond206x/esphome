@@ -5009,7 +5009,7 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
         ESP_LOGI(TAG, "0x10 send");
         delay(2);
         for (uint32_t i = 0; i < buf_len; i++) {
-          this->data(0xFF);
+          this->data(0x00);
         }
         ESP_LOGI(TAG, "0x10 data send");
       }
