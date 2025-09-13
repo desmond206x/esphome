@@ -4933,20 +4933,18 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
     this->command(0x10);  // Send BW data Transmission
     this->write_array(this->buffer_, buf_len);
 
-    // for (uint32_t i = 0; i < buf_len; i++) {
-    //   this->data(~this->buffer_[i]);
-    // }
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(~this->buffer_[i]);
+    }
 
     this->command(0x13);  // Send red data Transmission
-    this->write_array(this->buffer_ + buf_len, buf_len);
+    // this->write_array(this->buffer_ + buf_len, buf_len);
 
-    // for (uint32_t i = 0; i < buf_len; i++) {
-    //   this->data(this->buffer_[i + buf_len]);
-    // }
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i + buf_len]);
+    }
 
     this->turn_on_display_();
-    delay(100);  // NOLINT
-    this->wait_until_idle_();
   }
   else {
     // this->command(0x50);
@@ -4980,8 +4978,6 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       // }
 
       // this->turn_on_display_();
-      // delay(100);  // NOLINT
-      // this->wait_until_idle_();
     // } else {
       ESP_LOGI(TAG, "Partial refresh");
       this->init_display_partial_();
@@ -5021,18 +5017,15 @@ void HOT WaveshareEPaper7P5InBV3PBWR::display() {
       this->command(0x13);
       ESP_LOGI(TAG, "0x13 send");
 
-      this->write_array(this->buffer_ ^ 0xFF, buf_len);
-      // for (uint32_t i = 0; i < buf_len; i++) {
-      //   this->data(~this->buffer_[i]);
-      // }
+      // this->write_array(this->buffer_, buf_len);
+      for (uint32_t i = 0; i < buf_len; i++) {
+        this->data(~this->buffer_[i]);
+      }
       ESP_LOGI(TAG, "0x13 data send");
       
       ESP_LOGI(TAG, "turn on now");
       this->turn_on_display_();
       ESP_LOGI(TAG, "turned on");
-      delay(100);  // NOLINT
-      this->wait_until_idle_();
-      ESP_LOGI(TAG, "idle after turn on");
     }
 
     ESP_LOGI(TAG, "Before command(0x02) (>> power off)");
